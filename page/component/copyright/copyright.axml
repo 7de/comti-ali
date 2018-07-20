@@ -1,0 +1,5 @@
+<template name="copyright">
+  <view class="com-ft zan-center">
+      <text class="zan-font-12 zan-c-gray">CopyRight® 康体佳充电 2015-2018</text>
+    </view>
+</template>

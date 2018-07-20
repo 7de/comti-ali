@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "page/home/home",
+    "page/component/index",
+    "page/personal/personal",
+    "page/order/order",
+    "page/wallet/wallet",
+    "page/wallet-detail/wallet-detail",
+    "page/wallet-topup/wallet-topup",
+    "page/wallet-topup-record/wallet-topup-record",
+    "page/message/message",
+    "page/setting/setting",
+    "page/help/help",
+    "page/about/about",
+    "page/scancode/scancode",
+    "page/charging/charging",
+    "page/authorize/authorize"
+  ],
+  "window": {
+    "enableWK": "YES",
+    "enableDSL": true,
+    "defaultTitle": "康体佳充电",
+    "pullRefresh": false,
+    "allowsBounceVertical": true,
+    "backgroundColor": "#f0eff5"
+  },
+  "debug": true
+}

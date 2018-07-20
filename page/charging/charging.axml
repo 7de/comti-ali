@@ -1,0 +1,25 @@
+<view class="container">
+    <view class="margin-top-30 zan-center" style="height:30px; padding:10px;">
+      <progress percent="{{charg_longtime}}" color="#1AAD19" show-info active></progress>
+    </view>
+    <view class="zan-panel">
+      <view class="zan-cell">
+        <view class="zan-cell__bd"><view class="charging_title">设备编码</view><text class="">{{chargData.socketSeq}}</text></view>
+      </view>
+      <view class="zan-cell">
+        <view class="zan-cell__bd"><view class="charging_title">充电时长</view><text class="time-padding">{{hours}}</text>:<text class="time-padding">{{minuters}}</text>:<text class="time-padding">{{seconds}}</text></view>
+      </view>
+      <view class="zan-cell">
+        <view class="zan-cell__bd"><view class="charging_title">预计结束时间</view><text class="">{{charg_endtime}}</text></view>
+      </view>
+      <view class="zan-cell">
+        <view class="zan-cell__bd"><view class="charging_title">预估金额</view><text class="zan-font-16 zan-c-red">￥{{money}}</text></view>
+      </view>
+    </view>
+    <view style="margin:60rpx 40rpx 20rpx">
+      <view>
+        <navigator open-type="reLaunch" url="/page/home/home" class="zan-btn zan-btn--primary">返回首页</navigator>
+      </view>
+      <view class="margin-top-30"><button class="zan-btn zan-btn--primary zan-btn--plain" onTap="goClose">结束充电</button></view>
+    </view>
+</view>

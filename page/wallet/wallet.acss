@@ -1,0 +1,15 @@
+.wallet-title{
+  overflow: hidden;
+  margin: 0 auto;
+  
+}
+.wallet-title .iconfont{
+font-size: 60px;
+color: #999;
+}
+.money{
+  font-size:100rpx;
+}
+.money text{
+    font-weight: bold
+}

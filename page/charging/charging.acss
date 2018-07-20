@@ -1,0 +1,11 @@
+.charging_title{
+  float: left;
+  width: 220rpx;
+  font-size: 12px;
+}
+.time-padding{
+  padding:0 8rpx;
+  display: inline-block;
+  text-align: center;
+  width: 50rpx;
+}

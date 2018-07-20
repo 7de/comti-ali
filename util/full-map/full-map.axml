@@ -1,0 +1,17 @@
+<template name="fullmap">
+  <view class="map-con">
+      <map
+        id="map"
+        longitude="{{longitude}}"
+        latitude="{{latitude}}"
+        scale="{{scale}}"
+        controls="{{mapcontrols}}"
+        onControlTap="controltap"
+        markers="{{markers}}"
+        onMarkerTap="markertap"
+        onRegionChange="regionchange"
+        onTap="tap"
+        onCalloutTap="callouttap" show-location style="width: 100%; height: 93.5vh;">
+      </map>
+  </view>
+</template>

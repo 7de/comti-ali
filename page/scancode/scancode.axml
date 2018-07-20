@@ -1,0 +1,53 @@
+<view class="container scan-box">
+    <view class="zan-panel">
+      <view class="zan-cell">
+        <view class="zan-cell__bd zan-clearfix">
+          <view class="scan-subtitle zan-pull-left">
+            <view class="iconfont icon-qrcode zan-font-30" style="color:#7fb80e;"></view>
+          </view>
+          <view class="scan-subtitle-con zan-pull-left"><input type="number" maxlength="12" class="zan-field__input" style="height:34px;font-size:18px;" onBlur="keyBlur" value="{{code}}" focus="{{input_focus}}"  placeholder="请输入充电插座ID"/></view>
+        </view>
+      </view>
+    </view>
+    <view class="zan-panel-title">请选择充电时长：</view>
+    <view class="zan-panel">
+      <radio-group class="zan-select__list" onChange="radioChange">
+        <label a:for="{{items}}" class="com-select-label com-select {{item.value === checkedValue?'com-select_active':''}}">
+          <radio class="zan-select__radio" value="{{item.value}}" checked="{{ item.value === checkedValue }}" disabled="{{itemsDis}}"/>
+          <view class="com-select__bd">
+            {{ item.name }}
+          </view>
+        </label>
+      </radio-group>
+    </view>
+    <view class="zan-panel-title">预估金额：<text class="zan-font-12">(电费{{changeFee}}+服务费{{serviceFee}})</text></view>
+    <view class="zan-panel">
+      <view class="zan-cell">
+        <view class="zan-cell__bd zan-clearfix">
+          <view class="scan-subtitle zan-pull-left">
+            <view class="iconfont icon-uutmoney zan-font-30" style="color:#7fb80e;"></view>
+          </view>
+          <text class="zan-pull-left zan-font-24 zan-c-red scan-subtitle-txt">￥{{totalFee}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="zan-panel-title">账户金额：</view>
+    <view class="zan-panel">
+      <view class="zan-cell">
+        <view class="zan-cell__bd" style="overflow:hidden">
+          <text class="zan-pull-left zan-font-26 zan-c-red scan-subtitle-txt zan-ellipsis" style="width:90%;">￥{{account}}</text>  
+        </view>
+        <view class="zan-cell__ft scan-btn">
+          <navigator  url="../wallet-topup/wallet-topup">
+            <button type="button" style="overflow:hidden;font-size:12px;">
+              <view class="iconfont icon-signboard zan-font-18 zan-pull-left"></view>
+              <text class="zan-pull-left">余额充值</text>
+            </button>
+          </navigator>
+        </view>
+      </view>
+    </view>
+    <view class="zan-panel" style="margin:30rpx 40rpx">
+      <button class="zan-btn zan-btn--primary {{(butDis||itemsDis)?'zan-btn--disabled':''}}" onTap="goCharging" disabled="{{butDis||itemsDis}}">确认并提交</button>
+    </view>
+  </view>

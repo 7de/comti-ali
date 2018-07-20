@@ -1,0 +1,6 @@
+.com-ft{
+  position: absolute;
+  bottom:50rpx;
+  left: 0;
+  right: 0;
+}

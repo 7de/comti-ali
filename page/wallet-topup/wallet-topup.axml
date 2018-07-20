@@ -1,0 +1,38 @@
+<view class="container">
+  <view class="zan-panel-title">账户余额：</view>
+  <view class="zan-panel">
+    <view class="zan-cell">
+      <view class="zan-cell__bd zan-clearfix">
+        <view class="scan-subtitle zan-pull-left">
+          <view class="iconfont icon-uutmoney zan-font-30" style="color:#7fb80e;"></view>
+        </view>
+        <text class="zan-pull-left zan-font-28 zan-c-red scan-subtitle-txt">￥{{account}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="zan-panel-title">充值金额：</view>
+  <form onSubmit="onSubmit" onReset="onReset">
+    <view class="zan-panel">
+      <radio-group class="zan-select__list" onChange="radioChange" name="lib">
+        <label a:for="{{items}}" class="com-select-label com-select {{item.value===checkedValue?'com-select_active':''}}">
+          <radio class="zan-select__radio" value="{{item.value}}" checked="{{item.checked}}" />
+          <view class="com-select__bd">
+            {{ item.name }}
+          </view>
+        </label>
+      </radio-group>
+      <view class="zan-cell" style="padding-top:0;padding-left:.5rem" a:if="{{othShow}}">
+        <view class="zan-cell__bd zan-clearfix" style="overflow:hidden;">
+          <view class="scan-subtitle zan-pull-left">
+            <view class="iconfont icon-money1 zan-font-20" style="color:#7fb80e;"></view>
+          </view>
+          <input class="zan-pull-left" type="digit" value="{{money_input}}" name="moneyinp" placeholder="自定义充值金额" onInput="bindKeyInput" focus="{{focus}}"/>
+        </view>
+      </view>
+    </view>
+    <view class="page_spacing">
+      <button class="zan-btn zan-btn--primary" style="margin-top:120rpx;" formType="submit">马上充值</button>
+    </view>
+  </form>
+  <!-- <zanToptips/> -->
+</view>

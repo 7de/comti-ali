@@ -1,0 +1,15 @@
+<import src="/page/component/copyright/copyright.axml" />
+<view class="container">
+  <view class="logo-hd zan-center">
+    <image src="../../images/logo.png" mode="aspectFit" class="logo-img" />
+  </view>
+  <view class="logo-tip zan-center">
+    <text class="zan-c-gray zan-font-12">您所授权的信息，我们将不会对外公布，请放心授权！</text>  
+  </view>
+  <view class="logo-bd">
+    <view class="padding-rl-30 padding-bottom-30">
+      <button type="primary" hover-class="btn-hover-primary" onTap="getAuthorize">点击授权</button>
+    </view>
+  </view>
+  <template is="copyright"/>
+</view>

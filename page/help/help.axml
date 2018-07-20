@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="page_spacing">
+    <picker onChange="bindPickerChange" value="{{index}}" range="{{array}}">
+      <view class="zan-panel">
+        <view class="zan-cell zan-cell--access">
+          <view class="zan-cell__bd">{{pickerBtn ? array[index]:'请选择反馈类型'}}</view>
+          <view class="zan-cell__ft"></view>
+        </view>
+      </view>
+    </picker>
+    <view class="zan-panel">
+      <textarea onBlur="bindTextAreaBlur" auto-height placeholder="请写下您对康体佳充电的感受，我们将认真听取您的意见，努力提供更优质的服务" />
+    </view>
+    <view class="zan-panel">
+      <view class="form-row">
+        <view class="form-row-content">
+          <input class="input" placeholder="手机/邮箱/QQ（选填）" />
+        </view>
+      </view>
+    </view>
+    <view class="zan-panel">
+      <button class="zan-btn zan-btn--primary" formType="submit">提交</button>
+    </view>
+  </view>
+</view>

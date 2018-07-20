@@ -1,0 +1,9 @@
+<template name="tab">
+  <view class="zan-tab">
+    <view class="zan-tab__bd">
+      <view a:for="{{list}}" a:key="id" class="zan-tab__item {{selectedId == item.id ? 'zan-tab__item--selected' : ''}}" data-item-id="{{item.id}}" onTap="handleZanTabChange">
+        <view class="zan-tab__title">{{item.title}}</view>
+      </view>
+    </view>
+  </view>
+</template>

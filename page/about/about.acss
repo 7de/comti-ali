@@ -1,0 +1,11 @@
+@import "/page/component/copyright/copyright.acss";
+.logo-img{
+  width: 320rpx;
+}
+
+.logo-bd>view{
+padding-left: 180rpx;
+}
+.logo-bd .logo-bd__item{
+padding: 15rpx 0;
+}

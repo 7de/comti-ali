@@ -1,0 +1,18 @@
+@import "/page/component/copyright/copyright.acss";
+.logo-img{
+  width: 230rpx;
+}
+.logo-tip{
+  margin-top:-85rpx;
+  margin-bottom:130rpx;
+ 
+}
+.logo-tip>text{
+    display: inline-block
+}
+.logo-bd > .logo-bd-info{
+    padding-left: 180rpx;
+  }
+  .logo-bd .logo-bd__item{
+    padding: 15rpx 0;
+  }

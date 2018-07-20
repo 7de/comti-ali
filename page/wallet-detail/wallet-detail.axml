@@ -1,0 +1,22 @@
+<import src="/page/component/loading/loading.axml"/>
+<view class="container">
+  <block a:if="{{recordList.length>0}}">
+    <scroll-view scroll-y='true' onScrollToLower="lower" style="height:{{height}}px;">
+      <view class="zan-panel" a:for="{{recordList}}" a:key="index" a:for-index="index" a:for-item="item">
+        <view class="zan-cell">
+          <view class="zan-cell__bd">变更内容：{{item.typeText}}</view>
+          <view class="zan-cell__ft zan-c-{{item.refundType===1?'green':'red'}}">￥{{item.refundType===1?'-':'+'}}<text style="padding-left:4rpx">{{item.totalFee/100}}</text></view>
+        </view>
+        <view class="zan-cell">
+          <view class="zan-cell__bd zan-font-12 zan-c-gray-dark">变更时间：{{item.updateTime}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </block>
+  <view a:else class="zan-center" style="padding-top:20rpx">
+    <block a:if="{{loadingShow}}">
+      <template is="loading"/>
+    </block>
+    <text a:else class="zan-c-gray-dark zan-font-12">暂无数据</text>
+  </view>
+</view>

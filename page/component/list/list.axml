@@ -1,0 +1,18 @@
+<template name="list">
+  <view class="a-list page-description">
+      <view class="a-list-items">
+        <block a:for={{list}}>
+          <navigator class="a-list-item {{index !== (list.length - 1) ? '': 'last'}} am-list-item-middle"
+                hover-class="a-list-item-hover" url ="{{item.path}}">
+              <view class="a-list-item-line">
+                <view class="iconfont icon-{{item.iconfont}} ico-personal" a:if="{{item.iconfont}}"></view>
+                <text class="a-list-item-content">{{item.title}}</text>
+                <view a:if={{item.extra}} class="a-list-item-extra" >{{item.extra}}</view>
+                <view a:if={{item.arrow}} class="a-list-arrow a-list-arrow-{{item.arrow}}" />
+                <view class="a-list-item-bottom" />
+              </view>
+          </navigator >
+        </block>
+      </view>
+    </view>
+</template>

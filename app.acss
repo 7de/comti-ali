@@ -1,0 +1,147 @@
+@import "/zanui/iconfont.acss";
+@import "/zanui/btn.acss";
+@import "/zanui/panel.acss";
+@import "/zanui/cell.acss";
+@import "/zanui/helper.acss";
+@import "/zanui/tag.acss";
+
+page {
+  color:#444;
+}
+.container {
+  background: #f0eff5;
+  overflow: hidden;
+  min-height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+}
+.container::before {
+  position: fixed;
+  top: 0;
+  left: 0;
+  content: ' ';
+  width: 100%;
+  height: 1rpx;
+  background-color: #f0eff5;
+  z-index: 5;
+}
+
+.page {
+  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
+  font-size: 24rpx;
+  padding: 32rpx;
+  flex: 1;
+}
+
+.page-description {
+  margin-bottom: 32rpx;
+}
+
+.page-section {
+  background: #fff;
+  margin-bottom: 32rpx;
+}
+
+.page-section-title {
+  padding: 16rpx 32rpx;
+}
+
+.page-section-demo {
+  padding: 32rpx;
+}
+
+.page_spacing {
+  padding: 0 30rpx 40rpx;
+}
+
+/* flex布局 */
+.a-flex{
+  display: flex
+}
+.flex-justify-around{
+  justify-content:space-around
+}
+
+.text-center{
+  text-align: center;
+}
+
+.padding-20{
+  padding: 20rpx 0;
+}
+.padding-right-30{
+  padding-right: 30rpx;
+}
+
+.margin-top-15{
+  margin-top: 15rpx;
+}
+.margin-top-30{
+  margin-top: 30rpx;
+}
+.padding-rl-30{
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+}
+.padding-right-30{
+  padding-right: 30rpx;
+}
+.padding-bottom-30{
+  padding-bottom: 30rpx;
+}
+/* 单选项 --start*/
+.zan-select__list .zan-select__radio {
+  /* display: none; */
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.com-select-label{
+  float: left;
+  width: 29%;
+  position: relative;
+}
+.com-select{
+  height: 45rpx;
+  line-height: 45rpx;
+  border:1px solid #eee;
+  border-radius: 50rpx;
+  text-align: center;
+  padding:10rpx 0;
+  margin: 10rpx 12rpx;
+  font-size: 12px;
+  color:#999;
+}
+.com-select__bd{
+  position: absolute;
+  top:15rpx;
+  left:0;
+  right:0;
+  bottom:0;
+}
+.com-select_active{
+  border-color:#4b0;
+  background-color: #4b0;
+  color:#fff;
+}
+.zan-select__list{
+  overflow: hidden;
+  padding: 30rpx;
+}
+.zan-select__list .zan-row{
+    overflow: hidden;
+}
+/* 单选项 --end*/  
+
+/* 按钮primary背景颜色 --start*/
+.a-button-primary {
+    color: #fff;
+    background-color: #1AAD19;
+    border-color: #1AAD19;
+  }
+.btn-hover-primary {
+  background-color: #43b133;
+  border-color:#43b133;
+}
+
+/* 按钮primary背景颜色 --end*/

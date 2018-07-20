@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="page_spacing">
+    <view class="zan-panel">
+      <view class="zan-cell">
+          <view class="zan-cell__bd">安全警告</view>
+          <view class="zan-cell__ft">2018-05-09</view>
+      </view>
+      <view class="zan-cell">
+          <view class="zan-cell__bd zan-font-12 zan-c-gray-darker">安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告</view>
+      </view>
+    </view>
+    <view class="zan-panel">
+      <view class="zan-cell">
+          <view class="zan-cell__bd">安全警告</view>
+          <view class="zan-cell__ft">2018-05-09</view>
+      </view>
+      <view class="zan-cell">
+          <view class="zan-cell__bd zan-font-12 zan-c-gray-darker">安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告安全警告</view>
+      </view>
+    </view>
+    <view class="zan-panel">
+      <view class="zan-cell">
+          <view class="zan-cell__bd">安全警告</view>
+          <view class="zan-cell__ft">2018-05-09</view>
+      </view>
+      <view class="zan-cell">
+          <view class="zan-cell__bd zan-font-12 zan-c-gray-darker">全警告安全警告</view>
+      </view>
+    </view>
+  </view>
+</view>

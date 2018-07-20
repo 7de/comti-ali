@@ -1,0 +1,53 @@
+@import "/page/component/popup/popup.acss";
+@import "/page/component/fullmap/fullmap.acss";
+.com-home{
+    background-color: #fff;
+}
+
+.com_bd{
+    position: relative;
+    transition: all .15s;
+}
+
+.maker_close{
+    position: absolute;
+    bottom:-9%;
+    right: 0;
+    width: 80rpx;
+    height:80rpx;
+    line-height: 80rpx;
+    z-index: 20;
+    color: #1AAD19;
+}
+.maker_close > text{
+    font-size: 48rpx;
+}
+.tab {
+    height:80rpx;
+    line-height:80rpx;
+    background-color: #fff;
+    font-size: 33rpx;
+}
+.tab > .tab_item{
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    position: relative;
+}
+.tab > .tab_item::after{
+    content:'';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2rpx;
+    width: 30%;
+    height: 5rpx;
+    margin: 0 auto;
+    background-color: #fff;
+}
+ .tab_item.active {
+    color: #1AAD19;
+}
+ .tab_item.active::after {
+    background-color: #1AAD19;
+}

@@ -1,0 +1,12 @@
+<template name="fullmap">
+  <map
+    id="map"
+    longitude="{{longitude}}"
+    latitude="{{latitude}}"
+    scale="{{scale}}"
+    controls="{{mapcontrols}}"
+    onControlTap="controltap"
+    markers="{{markers}}"
+    onMarkerTap="markertap" show-location>
+  </map>
+</template>

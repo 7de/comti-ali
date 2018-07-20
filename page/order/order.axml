@@ -1,0 +1,16 @@
+<import src="/page/component/tabbar/tabbar.axml"/>
+<import src="/page/component/card/card.axml"/>
+<import src="/page/component/loading/loading.axml"/>
+<view class="com_hd">
+  <template is="tab" data="{{...tab}}"/>
+</view>
+<view class="con_bd">
+  <scroll-view scroll-y='true' onScrollToLower="allLower" style="height:{{height-50}}px">
+    <block a:if="{{loadingsubShow}}">
+      <template is="loading"/>
+    </block>
+    <block a:else>
+      <template is="card" data="{{...allData}}"/>
+    </block>
+  </scroll-view>
+</view>

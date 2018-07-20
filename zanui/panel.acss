@@ -1,0 +1,41 @@
+.zan-panel {
+  position: relative;
+  background: #fff;
+  margin-top: 40rpx;
+  overflow: hidden;
+}
+.zan-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  transform: scale(.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 0 solid #e5e5e5;
+  border-top-width: 2rpx;
+  border-bottom-width: 2rpx;
+}
+
+.zan-panel-title {
+  font-size: 25rpx;
+  line-height: 1;
+  color: #999;
+  padding: 20rpx 15rpx 0 15rpx;
+}
+
+
+.zan-panel--without-margin-top {
+  margin-top: 0;
+}
+
+.zan-panel--without-border::after {
+  border: 0 none;
+}
+
+.zan-panel--radius {
+  border-radius: 15rpx;
+}

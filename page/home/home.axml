@@ -1,0 +1,20 @@
+<!-- <import src="/util/full-map/full-map.axml" /> -->
+<import src="/page/component/fullmap/fullmap.axml" />
+<import src="/page/component/popup/popup.axml" />
+<view class="com com-home">
+  <view class="com_hd">
+    <view class="tab">
+      <view class="tab_item active">
+          <text class="title">电单车</text>
+      </view>
+      <view class="tab_item" onTap="showToast">
+          <text class="title">电动汽车</text>
+      </view>
+    </view>
+  </view>
+  <view class="com_bd map-con" style="height:{{showPopup?71:93}}vh">
+    <template is="fullmap" data="{{...map,mapcontrols:mapcontrols,markers}}"/>
+    <template is="popup" data="{{...markersinfo,direction,showPopup}}"/>
+    <view class="maker_close zan-center" onTap="togglePopup" a:if="{{showPopup}}"><text class="iconfont icon-wrong"></text></view>
+  </view>
+</view>

@@ -1,0 +1,8 @@
+<template name="loading">
+  <view class="zan-center" style="padding-top:10rpx">
+    <view class="zan-loadmore">
+      <view class="zan-loading"></view>
+      <view class="zan-loadmore__tips">加载中...</view>
+    </view>
+  </view>
+</template>
