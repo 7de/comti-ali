@@ -7,8 +7,8 @@ Page({
   // ...fullmap,
   data: {
     map:{
-      longitude: 113.88308,
-      latitude: 22.55329
+      longitude: 113.83692,
+      latitude: 22.60545
     },
     markers: [], // 地图标点
     markersinfo: {}, // 标点信息
@@ -26,6 +26,7 @@ Page({
         })
       }
     })
+    this.showCharging()
   },
   onReady() {
     // 使用 my.createMapContext 获取 map 上下文
@@ -35,7 +36,6 @@ Page({
     this.getLocation()
     this.mapControl()
     this.getMarkers()
-    this.showCharging()
   },
   // 定位到本地坐标
   movetoPosition() {
@@ -45,7 +45,7 @@ Page({
   getMarkers() {
     let that = this
     api.get(markerUrl+'queryMapSiteList').then(res => {
-      console.log(res)
+      // console.log(res)
       my.hideLoading()
       that.setData({
         markers: res.data
@@ -54,48 +54,48 @@ Page({
   },
   // 标记点击事件
   markertap(e) {
-    console.log('标记id:' + e.markerId)
     let _markers = this.data.markers
     let _len = _markers.length
-    const markerId = e.markerId
-    console.log(_markers)
+    const markerId = parseInt(e.markerId)
     for (let v in _markers) {
       if (_markers[v].id === markerId) {
         this.setData({
           // markersinfo: _markers[v].callout
           markersinfo: _markers[v].callout
         })
-        console.log('标签信息:' + _markers[v].callout.siteName)
       }
     }
     /* for (var i=0;i<_len;i++) {
       if (_markers[i].id === markerId){
         this.setData({
-          // markersinfo: _markers[v].callout
           markersinfo: _markers[i].callout
         })
         console.log('标签信息' + _markers[i].callout.siteName)
       }
     } */
+    console.log('点击一')
     if (!this.data.showPopup && this.data.oldMarkerID !== markerId) {
-        // this.togglePopup()
         this.setData({
           oldMarkerID: markerId,
           showPopup: true
         })
-      } else if (!this.data.showPopup && this.data.oldMarkerID === markerId) {
-        if(!this.data.showPopup){
-          this.setData({
-            showPopup: true
-          })
-        }
+      console.log('点击二')
+    } else if (!this.data.showPopup && this.data.oldMarkerID === markerId) {
+      console.log('点击三')
+      if(!this.data.showPopup){
+        this.setData({
+          showPopup: true
+        })
+        console.log('点击四')
       }
+    }
   },
   // 显示标点详细信息
   togglePopup() {
     this.setData({
       showPopup: false
     })
+    console.log('关闭')
   },
 
   // 地图控件

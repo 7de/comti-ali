@@ -10,6 +10,7 @@
     "page/wallet-topup-record/wallet-topup-record",
     "page/message/message",
     "page/setting/setting",
+    "page/setting-user/setting-user",
     "page/help/help",
     "page/about/about",
     "page/scancode/scancode",

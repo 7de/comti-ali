@@ -2,9 +2,9 @@ import page from './page.js'
 export default {
     apiData : {
       // 正式
-      // host: 'https://www.comtti.net/',
+      host: 'https://www.comtti.net/',
       // 测试
-      host: 'https://actor.comtti.net/',
+      // host: 'https://actor.comtti.net/',
       loginUrl: 'ali/aliLogin/'
     },
     _request(method, url, params, header = {}) {

@@ -1,4 +1,9 @@
+<import src="/page/component/loading-page/loading-page.axml"/>
 <view class="container">
+  <block a:if="{{showLoading}}">
+    <template is="loadingpage"/>
+  </block>
+  <block a:else>
     <view class="margin-top-30 zan-center" style="height:30px; padding:10px;">
       <progress percent="{{charg_longtime}}" color="#1AAD19" show-info active></progress>
     </view>
@@ -22,4 +27,5 @@
       </view>
       <view class="margin-top-30"><button class="zan-btn zan-btn--primary zan-btn--plain" onTap="goClose">结束充电</button></view>
     </view>
+  </block>
 </view>

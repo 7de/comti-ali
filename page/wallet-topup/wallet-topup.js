@@ -4,26 +4,27 @@ const URL = 'wallet/customWallet/queryBalanceBySession'
 const payUrl = 'ali/Alipay/jsapi/'
 Page({
   data: {
+    showLoading: true,
     items: [
       {
         value: '1000',
-        name: '冲￥1000'
+        name: '充￥1000'
       },
       {
         value: '500',
-        name: '冲￥500'
+        name: '充￥500'
       },
       {
         value: '100',
-        name: '冲￥100'
+        name: '充￥100'
       },
       {
         value: '50',
-        name: '冲￥50'
+        name: '充￥50'
       },
       {
         value: '20',
-        name: '冲￥20'
+        name: '充￥20'
       },
       {
         value: 'oth',
@@ -34,7 +35,7 @@ Page({
     othShow: false,
     money_input: null,
     focus: true,
-    account: '0.00' // 账户余额
+    account: '加载中...' // 账户余额
   },
   onLoad() {},
   onShow() {
@@ -47,7 +48,8 @@ Page({
     api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
       my.hideLoading()
       this.setData({
-        account: api.fotmatMoney(res.data)
+        showLoading: false,
+        account: parseFloat(api.fotmatMoney(res.data))
       })
     })
   },
@@ -93,6 +95,7 @@ Page({
       })
     } else {
       let _money = e.detail.value.moneyinp ? e.detail.value.moneyinp : e.detail.value.lib
+      console.log('充值金额：' + _money)
       let _params = Object.assign({
         rdSession: app.globalData.token,
         subject: '充值' + _money + '元',

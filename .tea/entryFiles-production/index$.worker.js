@@ -12,6 +12,7 @@ require('../../page/wallet-topup/wallet-topup');
 require('../../page/wallet-topup-record/wallet-topup-record');
 require('../../page/message/message');
 require('../../page/setting/setting');
+require('../../page/setting-user/setting-user');
 require('../../page/help/help');
 require('../../page/about/about');
 require('../../page/scancode/scancode');

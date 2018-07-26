@@ -1,10 +1,10 @@
 <import src="/page/component/copyright/copyright.axml" />
 <view class="container">
   <view class="zan-panel">
-    <view class="zan-cell zan-cell--access">
+    <navigator  class="zan-cell zan-cell--access" url="/page/setting-user/setting-user">
       <view class="zan-cell__bd">用户指南</view>
       <view class="zan-cell__ft"></view>
-    </view>
+    </navigator >
   </view>
   <template is="copyright"/>
   </view>

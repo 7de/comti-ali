@@ -1,3 +1,4 @@
+@import "/page/component/loading-page/loading-page.acss";
 .wallet-title{
   overflow: hidden;
   margin: 0 auto;

@@ -4,6 +4,7 @@ const app = getApp()
 const orderURL = 'server/'
 Page({
   data: {
+    showLoading: true,
     chargData: {},
     hours: 0,
     minuters: 0,
@@ -97,7 +98,9 @@ Page({
       url: api.apiData.host + orderURL + 'queryOrderBrief/' + this.data.order_no,
       method: 'GET',
       success: ({data}) => {
-        console.log(data)
+        this.setData({
+          showLoading: false
+        })
         if(data.code === 0) {
           let _data = data.data
           let _oldtime = _data.actieTime
@@ -119,9 +122,10 @@ Page({
           this.setData({
             isCharging: false
           })
+          console.log(data.msg)
           my.alert({
             title: '温馨提示',
-            content: '您本次充电完成',
+            content: data.msg,
             buttonText: '我知道了',
             success: () => {
               page.goHome()

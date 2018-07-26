@@ -35,7 +35,7 @@
     <view class="zan-panel">
       <view class="zan-cell">
         <view class="zan-cell__bd" style="overflow:hidden">
-          <text class="zan-pull-left zan-font-26 zan-c-red scan-subtitle-txt zan-ellipsis" style="width:90%;">￥{{account}}</text>  
+          <text class="zan-pull-left zan-c-red scan-subtitle-txt zan-ellipsis {{typeof account !== 'number'?'zan-font-22':'zan-font-26'}}" style="width:90%;">￥{{account}}</text>  
         </view>
         <view class="zan-cell__ft scan-btn">
           <navigator  url="../wallet-topup/wallet-topup">
@@ -48,6 +48,6 @@
       </view>
     </view>
     <view class="zan-panel" style="margin:30rpx 40rpx">
-      <button class="zan-btn zan-btn--primary {{(butDis||itemsDis)?'zan-btn--disabled':''}}" onTap="goCharging" disabled="{{butDis||itemsDis}}">确认并提交</button>
+      <button class="zan-btn zan-btn--primary {{(butDis||itemsDis)?'zan-btn--disabled':''}}" onTap="goCharging" disabled="{{itemsDis}}">确认并提交</button>
     </view>
   </view>

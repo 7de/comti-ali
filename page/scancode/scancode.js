@@ -44,9 +44,9 @@ Page({
     ],
     checkedValue: -1,
     itemsDis: false, // 不可用
-    butDis: true,
+    // butDis: true,
     index: 0,
-    account: '0.00',
+    account: '加载中...',
     time_value: 0, // 时长
     charger_mode: null, // 充电模式
     changeFee: '0.00', // 充电费
@@ -59,7 +59,6 @@ Page({
         code: query.num
       })
     } else if (app.globalData.qrCode) {
-      console.log('直接扫二维码')
       let _qr = decodeURIComponent(app.globalData.qrCode)
       let _qrBox = _qr.split('num=')
       let _code = _qrBox[1]
@@ -69,7 +68,6 @@ Page({
     }
   },
   onShow(){
-    console.log('扫码：' + app.globalData.token)
     // 账户余额查询
     my.showLoading({
       content: '余额查询中...'
@@ -78,7 +76,7 @@ Page({
       my.hideLoading()
       if (res.code === 0) {
         this.setData({
-          account: api.fotmatMoney(res.data)
+          account: parseFloat(api.fotmatMoney(res.data))
         })
       }
     })
@@ -101,27 +99,17 @@ Page({
         charger_mode: 0
       })
     }
-    if (this.data.time_value >= Number(this.data.account)) {
+    if (this.data.code) {
+      let _params = Object.assign({
+        serialNum: this.data.code,
+        chargeTime: this.data.time_value
+      })
+      this.checkMoney(_params)
+    } else {
       my.showToast({
         type: 'none',
-        content: '您的余额不足以选择此服务，请及时充值。'
+        content: '请确认二维码编号是否填写'
       })
-    } else {
-      this.setData({
-        butDis: false
-      })
-      if (this.data.code) {
-        let _params = Object.assign({
-          serialNum: this.data.code,
-          chargeTime: this.data.time_value
-        })
-        this.checkMoney(_params)
-      } else {
-        my.showToast({
-          type: 'none',
-          content: '请确认二维码编号是否填写'
-        })
-      }
     }
   },
   // 编号输入
@@ -139,69 +127,75 @@ Page({
   },
   goCharging() {
     const _this = this
-    my.confirm({
-      title: '温馨提示',
-      content: '请确认是否开始充电？',
-      success: (result) => {
-        if(result.confirm) {
-          let _params = Object.assign({
-            chargerMode: parseInt(this.data.charger_mode),
-            chargerValue: this.data.time_value,
-            streamNo: this.data.code,
-            totalFee: this.data.totalFee * 100
-          })
-          my.showLoading({
-            content: '开启充电...'
-          })
-          my.httpRequest({
-            url: api.apiData.host + chargrURL + 'chargeStart?rdSession=' + app.globalData.token,
-            method: 'POST',
-            headers: Object.assign({
-              'content-type': 'application/json'
-            }),
-            data: JSON.stringify({
+    if (this.data.checkedValue < 0) {
+      my.showToast({
+        content: '请选择充电时长',
+        type: 'none'
+      })
+    } else {
+      my.confirm({
+        title: '温馨提示',
+        content: '请确认是否开始充电？',
+        success: (result) => {
+          if(result.confirm) {
+            let _params = Object.assign({
               chargerMode: parseInt(this.data.charger_mode),
               chargerValue: this.data.time_value,
               streamNo: this.data.code,
               totalFee: this.data.totalFee * 100
-            }),
-            dataType: 'json',
-            success: (res) => {
-              my.hideLoading()
-              const {data} = res
-              if (data.code === 500 || res.status === 500) {
-                my.showToast({
-                  content: '服务器错误，请联系管理员',
-                  type: 'fail ',
-                  duration: 2000
-                })
-              } else if (data.code === -100) {
-                my.alert({
-                  title: '提示',
-                  content: '授权过期',
-                  buttonText: '去授权',
-                  success: () => {
-                      my.redirectTo({
-                          url: '../authorize/authorize'
-                      })
-                  }
-                })
-              } else if (data.code === 0) {
-                my.redirectTo({
-                  url: '/page/charging/charging?orderNo=' + data.data + '&time=' + _this.data.time_value + '&equipNo=' + _this.data.code
-                })
-              } else {
-                my.showToast({
-                  content: data.msg,
-                  type: 'none'
-                })
+            })
+            my.showLoading({
+              content: '开启充电...'
+            })
+            my.httpRequest({
+              url: api.apiData.host + chargrURL + 'chargeStart?rdSession=' + app.globalData.token,
+              method: 'POST',
+              headers: Object.assign({
+                'content-type': 'application/json'
+              }),
+              data: JSON.stringify({
+                chargerMode: parseInt(this.data.charger_mode),
+                chargerValue: this.data.time_value,
+                streamNo: this.data.code,
+                totalFee: this.data.totalFee * 100
+              }),
+              dataType: 'json',
+              success: (res) => {
+                my.hideLoading()
+                const {data} = res
+                if (data.code === 500 || res.status === 500) {
+                  my.showToast({
+                    content: '服务器错误，请联系管理员',
+                    type: 'fail ',
+                    duration: 2000
+                  })
+                } else if (data.code === -100) {
+                  my.alert({
+                    title: '提示',
+                    content: '授权过期',
+                    buttonText: '去授权',
+                    success: () => {
+                        my.redirectTo({
+                            url: '../authorize/authorize'
+                        })
+                    }
+                  })
+                } else if (data.code === 0) {
+                  my.redirectTo({
+                    url: '/page/charging/charging?orderNo=' + data.data + '&time=' + _this.data.time_value + '&equipNo=' + _this.data.code
+                  })
+                } else {
+                  my.showToast({
+                    content: data.msg,
+                    type: 'none'
+                  })
+                }
               }
-            }
-          })
+            })
+          }
         }
-      },
-    });
-
+      })
+    }
   },
   // 设备查询
   checkEqui() {
@@ -217,7 +211,9 @@ Page({
         if (res.data.code === -1) {
           let _msg = res.data.msg
           this.setData({
-            itemsDis: true
+            itemsDis: true,
+            items: this.data.items,
+            checkedValue: -1
           })
           my.confirm({
             title: '温馨提示',
@@ -230,6 +226,16 @@ Page({
             }
           })
         } else if (res.data.code === 0) {
+          /* if(this.data.checkedValue < 0) {
+            my.alert({
+              title: '提示',
+              content: '请选择充电时长进行充电',
+              buttonText: '我知道了',
+              success: () => {
+                console.log('已通知')
+              }
+            })
+          } */
         } else {
           my.showToast({
             content: res.data.msg,
@@ -257,6 +263,16 @@ Page({
         serviceFee: api.fotmatMoney(_serviceFee),
         totalFee: api.fotmatMoney(Number(_changeFee) + Number(_serviceFee))
       })
+      if (_this.data.totalFee > _this.data.account) {
+        my.showToast({
+          type: 'none',
+          content: '您的余额不足以选择此服务，请及时充值。'
+        })
+        _this.setData({
+          items: _this.data.items,
+          checkedValue: -1
+        })
+      }
     })
   }
 });

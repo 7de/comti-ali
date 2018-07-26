@@ -1,1 +1,2 @@
 @import "/page/component/tabbar/tabbar.acss";
+@import "/page/component/loading/loading.acss";

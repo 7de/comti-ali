@@ -38,16 +38,16 @@ Page({
           path: '../message/message'
         },
         {
-          iconfont: 'set',
-          arrow: 'horizontal',
-          title: '系统设置',
-          path: '../setting/setting'
-        },
-        {
           iconfont: 'remind',
           arrow: 'horizontal',
           title: '帮助反馈',
           path: '../help/help'
+        }, */
+        /* {
+          iconfont: 'set',
+          arrow: 'horizontal',
+          title: '系统设置',
+          path: '../setting/setting'
         }, */
         {
           iconfont: 'information',
@@ -91,7 +91,7 @@ Page({
   clearStorage() {
     my.confirm({
       title: '温馨提示',
-      content: '是否确定清除掉本地缓存？',
+      content: '请确定是否清除本地缓存？',
       success: (result) => {
         if (result.confirm) {
           my.clearStorageSync()
