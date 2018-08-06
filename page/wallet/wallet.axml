@@ -9,7 +9,7 @@
           <view class="iconfont icon-user-menu-money"></view>
       </view>
       <view class="zan-c-gray-dark zan-font-14">我的余额</view>
-      <view class="money" style="color:#f15b6c">￥<text class="{{typeof account !== 'number'?'zan-font-14':''}}">{{account}}</text></view>
+      <view class="money" style="color:#f15b6c">￥<text class="">{{account}}</text></view>
       <navigator class="zan-btn zan-btn--primary" style="margin-top:120rpx;" url="/page/wallet-topup/wallet-topup">马上充值</navigator>
     </view>
   </view>

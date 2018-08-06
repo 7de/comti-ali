@@ -13,7 +13,7 @@
     </view>
   </view>
   <view class="com_bd map-con" style="height:{{showPopup?71.5:93.5}}vh">
-    <template is="fullmap" data="{{...map,mapcontrols:mapcontrols,markers}}"/>
+    <template is="fullmap" data="{{...map,mapcontrols:mapcontrols,markers,polyline}}"/>
     <template is="popup" data="{{...markersinfo,direction,showPopup}}"/>
     <view class="maker_close zan-center" onTap="togglePopup" a:if="{{showPopup}}"><text class="iconfont icon-wrong"></text></view>
     <!-- <view class="maker_close zan-center" onTap="togglePopup" a:if="{{showPopup}}"><text class="iconfont icon-wrong"></text></view> -->

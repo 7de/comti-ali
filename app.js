@@ -1,6 +1,7 @@
 import api from '/common/api.js'
 import page from '/common/page.js'
 const loginUrl = 'ali/aliLogin/'
+const URL = 'platform/platform/customer/getCustomerByKey'
 App({
   globalData: {
     hasLogin: false,
@@ -18,8 +19,17 @@ App({
   onShow() {
     let _token = my.getStorageSync({ key: 'token' })
     this.globalData.token = this.globalData.token ? this.globalData.token : _token.data
-    console.log('主页：'+ this.globalData.token)
-    if (!this.globalData.token) {
+    if(this.globalData.token) {
+      /* api.get(URL + '?rdSession=' + this.globalData.token).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          console.log(res)
+          if (!this.longitude) {
+            this.getLocation()
+          }
+        }
+      }) */
+    } else {
       my.navigateTo({
         url: '/page/authorize/authorize'
       })

@@ -1,1 +1,6 @@
 @import "/page/component/loading-page/loading-page.acss";
+.oth-input{
+    height: 32px;
+    line-height: 32px;
+    border:none;
+  }

@@ -4,7 +4,7 @@ const URL = 'wallet/customWallet/queryBalanceBySession'
 const payUrl = 'ali/Alipay/jsapi/'
 Page({
   data: {
-    showLoading: true,
+    showLoading: false,
     items: [
       {
         value: '1000',
@@ -35,38 +35,30 @@ Page({
     othShow: false,
     money_input: null,
     focus: true,
-    account: '加载中...' // 账户余额
+    account: '--' // 账户余额
   },
   onLoad() {},
   onShow() {
     my.showLoading({
-      title: '余额查询中...',
-      mask: true
+      content: '余额查询中...'
     })
-    console.log('充值：' + app.globalData.token)
     // 账户余额查询
     api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
       my.hideLoading()
-      this.setData({
-        showLoading: false,
-        account: parseFloat(api.fotmatMoney(res.data))
-      })
+      console.log(res)
+      if(res.code === 0) {
+        this.setData({
+          showLoading: false,
+          account: parseFloat(api.fotmatMoney(res.data))
+        })
+      }
     })
   },
-  bindKeyInput(e) {
-    let _floatMoney = parseFloat(e.detail.value).toFixed(2)
-    if (_floatMoney < 0.01) {
-      my.showToast({
-        content: '请输入充值金额'
-      })
-      this.setData({
-        money_input: ''
-      })
-    } else {
-      this.setData({
-        money_input: e.detail.value
-      })
-    }
+  blurInput(e) {
+    let _floatMoney = parseFloat(e.detail.value)
+    this.setData({
+      money_input: _floatMoney
+    })
   },
   radioChange(e) {
     if (e.detail.value==='oth') {
@@ -82,7 +74,6 @@ Page({
     this.setData({
       checkedValue: e.detail.value
     })
-    console.log('你选择的金额是：', e.detail.value)
   },
   onSubmit(e) {
     if (!e.detail.value.lib) {
@@ -93,9 +84,15 @@ Page({
       my.showToast({
         content: '请输入充值金额'
       })
+    } else if (e.detail.value.lib==='oth' && this.data.money_input < 0.01) {
+      my.showToast({
+        content: '请输入大于或等于0.01的金额'
+      })
+      this.setData({
+        money_input: ''
+      })
     } else {
       let _money = e.detail.value.moneyinp ? e.detail.value.moneyinp : e.detail.value.lib
-      console.log('充值金额：' + _money)
       let _params = Object.assign({
         rdSession: app.globalData.token,
         subject: '充值' + _money + '元',
@@ -116,21 +113,22 @@ Page({
               my.tradePay({
                 orderStr: _data, //完整的支付参数拼接成的字符串，从服务端获取
                 success: (res) => {
-                  console.log(res)
-                  console.log('成功')
                   my.navigateBack({
                     delta: 1
                   })
                 },
                 fail: (res) => {
-                  console.log('shiabi')
+                  my.alert({
+                    title: '提示',
+                    content: '充值失败，请稍后再试',
+                    buttonText: '我知道了'
+                  })
                 }
               })
             })
           }
         },
-      });
-      
+      })
     }
   }
 });

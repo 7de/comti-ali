@@ -1,6 +1,7 @@
 import api from '/common/api.js'
 import page from '/common/page.js'
 const app = getApp()
+const URL = 'platform/platform/customer/getCustomerByKey'
 Page({
   data: {
     user:{
@@ -68,7 +69,6 @@ Page({
         }
       })
     } else {
-      console.log('没有用户信息')
       my.getAuthCode({
         scopes: 'auth_user',
         success: (res) => {
@@ -87,6 +87,14 @@ Page({
         }
       })
     }
+    console.log('个人中心' + app.globalData.token)
+      /* api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          console.log(res)
+          console.log('获取信息')
+        }
+      }) */
   },
   clearStorage() {
     my.confirm({

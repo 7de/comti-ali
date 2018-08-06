@@ -11,12 +11,17 @@ Page({
       latitude: 22.60545
     },
     markers: [], // 地图标点
+    polyline: [], // 路线
     markersinfo: {}, // 标点信息
     mapcontrols: [], // 地图控件
     direction: 'bottom',
     showPopup: false,
     oldMarkerID: null,
-    height: ''
+    height: '',
+    currentMarkersLong: 0,
+    currentMarkersLati: 0,
+    currentMarkerName: '',
+    currentMarkerAddr: '',
   },
   onLoad() {
     my.getSystemInfo({
@@ -28,14 +33,14 @@ Page({
     })
     this.showCharging()
   },
-  onReady() {
+  onReady(e) {
     // 使用 my.createMapContext 获取 map 上下文
-    this.mapCtx = my.createMapContext('map');
-  },
-  onShow(){
+    this.mapCtx = my.createMapContext('map')
     this.getLocation()
     this.mapControl()
     this.getMarkers()
+  },
+  onShow(){
   },
   // 定位到本地坐标
   movetoPosition() {
@@ -61,7 +66,26 @@ Page({
       if (_markers[v].id === markerId) {
         this.setData({
           // markersinfo: _markers[v].callout
-          markersinfo: _markers[v].callout
+          markersinfo: _markers[v].callout,
+          currentMarkersLong: _markers[v].longitude,
+          currentMarkersLati: _markers[v].latitude,
+          currentMarkerName: _markers[v]['callout'].siteName,
+          currentMarkerAddr: _markers[v]['callout'].siteAddress,
+          polyline: [
+            {
+              points: [{ // 连线起点
+                longitude: this.data.map.longitude,
+                latitude: this.data.map.latitude
+              }, { // 连线终点(当前点击的标记)
+                longitude: _markers[v].longitude,
+                latitude: _markers[v].latitude
+              }],
+              color: '#1AAD19', // 连线颜色
+              width: 3, // 连线宽度
+              dottedLine: true, // 虚线
+              arrowLine: true
+            }
+          ]
         })
       }
     }
@@ -73,20 +97,16 @@ Page({
         console.log('标签信息' + _markers[i].callout.siteName)
       }
     } */
-    console.log('点击一')
     if (!this.data.showPopup && this.data.oldMarkerID !== markerId) {
         this.setData({
           oldMarkerID: markerId,
           showPopup: true
         })
-      console.log('点击二')
     } else if (!this.data.showPopup && this.data.oldMarkerID === markerId) {
-      console.log('点击三')
       if(!this.data.showPopup){
         this.setData({
           showPopup: true
         })
-        console.log('点击四')
       }
     }
   },
@@ -261,5 +281,22 @@ Page({
         })
       }
     })
+  },
+  goSite() {
+    my.confirm({
+      title: '温馨提示',
+      content: '是否查看"' + this.data.currentMarkerName + '充电站" ？',
+      confirmButtonText: '立即查看',
+      success: (result) => {
+        if (result.confirm) {
+          my.openLocation({
+            longitude: this.data.currentMarkersLong,
+            latitude: this.data.currentMarkersLati,
+            name: this.data.currentMarkerName + '充电站',
+            address: this.data.currentMarkerAddr,
+          })
+        }
+      },
+    });
   }
 });

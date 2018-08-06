@@ -16,6 +16,7 @@
         <view class="margin-top-15">
           <text class="padding-right-30">电费：<text class="zan-c-green">{{electricity?electricity:'0.00'}}</text>元/度</text>
           <text>服务费：<text class="zan-c-green">{{servicefee?servicefee:'0.00'}}</text>元/次</text>
+          <button class="zan-btn zan-btn--small zan-btn--primary" style="float:right;margin-top:-30rpx;" onTap="goSite">点击前往</button>
         </view>
       </view>
     </view>

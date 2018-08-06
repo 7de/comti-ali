@@ -2,15 +2,13 @@ import page from './page.js'
 export default {
     apiData : {
       // 正式
-      host: 'https://www.comtti.net/',
+      // host: 'https://www.comtti.net/',
       // 测试
-      // host: 'https://actor.comtti.net/',
-      loginUrl: 'ali/aliLogin/'
+      host: 'https://actor.comtti.net/pc/'
     },
     _request(method, url, params, header = {}) {
       const {
-        host,
-        loginUrl
+        host
       } = this.apiData
       return new Promise((resolve, reject) => {
         my.httpRequest({
@@ -30,24 +28,22 @@ export default {
                 type: 'fail ',
                 duration: 2000
               })
-              // resolve(this._request(method, url, params))
             } else if (data.code === -1) {
               my.showToast({
-                // title: data.msg ? data.msg : data.message,
                 content: data.msg,
-                type: 'fail',
+                type: 'none',
                 duration: 2000
               })
             } else if (data.code === -100) {
                 my.alert({
-                    title: '提示',
-                    content: '授权过期',
-                    buttonText: '去授权',
-                    success: () => {
-                        my.redirectTo({
-                            url: '../authorize/authorize'
-                        })
-                    }
+                  title: '提示',
+                  content: '授权过期',
+                  buttonText: '去授权',
+                  success: () => {
+                      my.navigateTo({
+                          url: '../authorize/authorize'
+                      })
+                  }
                 })
             } else if (res.status === 500) {
               my.showToast({
@@ -58,6 +54,9 @@ export default {
             } else {
               resolve(data)
             }
+          },
+          fail: res => {
+            console.log('请求失败：' + res)
           }
         })
       })

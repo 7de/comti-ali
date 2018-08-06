@@ -175,7 +175,7 @@ Page({
                     content: '授权过期',
                     buttonText: '去授权',
                     success: () => {
-                        my.redirectTo({
+                        my.navigateTo({
                             url: '../authorize/authorize'
                         })
                     }

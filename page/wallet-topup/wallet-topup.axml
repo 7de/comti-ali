@@ -11,7 +11,7 @@
           <view class="scan-subtitle zan-pull-left">
             <view class="iconfont icon-uutmoney zan-font-30" style="color:#7fb80e;"></view>
           </view>
-          <text class="zan-pull-left zan-c-red scan-subtitle-txt {{typeof account !== 'number'?'zan-font-22':'zan-font-28'}}">￥{{account}}</text>
+          <text class="zan-pull-left zan-c-red scan-subtitle-txt zan-font-28">￥{{account}}</text>
         </view>
       </view>
     </view>
@@ -31,7 +31,7 @@
             <view class="scan-subtitle zan-pull-left">
               <view class="iconfont icon-money1 zan-font-20" style="color:#7fb80e;"></view>
             </view>
-            <input class="zan-pull-left" type="digit" value="{{money_input}}" name="moneyinp" placeholder="自定义充值金额" onInput="bindKeyInput" focus="{{focus}}"/>
+            <input class="zan-pull-left oth-input" type="digit" value="{{money_input}}" name="moneyinp" placeholder="自定义充值金额" onBlur="blurInput" focus="{{focus}}"/>
           </view>
         </view>
       </view>

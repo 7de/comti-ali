@@ -47,7 +47,6 @@ Page({
             key: 'token',
             data: data.rd_session
           })
-          console.log('全局' + app.globalData.token)
           console.log(getCurrentPages().length)
           if(getCurrentPages().length>1){
             page.goBack()

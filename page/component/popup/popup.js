@@ -3,8 +3,7 @@ Page({
     showPopup: false
   },
   onLoad() {},
-  togglePopup() {
-    this.showPopup = !this.showPopup
-    this.$apply()
+  goSite() {
+    console.log('点击了')
   }
 });
