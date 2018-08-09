@@ -31,3 +31,23 @@
   height: 20px;
   line-height: 20px;
 }
+
+@-webkit-keyframes weuiLoading {
+    0% {
+        transform: rotate3d(0, 0, 1, 0deg);
+    }
+
+    100% {
+        transform: rotate3d(0, 0, 1, 360deg);
+    }
+}
+
+@keyframes weuiLoading {
+    0% {
+        transform: rotate3d(0, 0, 1, 0deg);
+    }
+
+    100% {
+        transform: rotate3d(0, 0, 1, 360deg);
+    }
+}

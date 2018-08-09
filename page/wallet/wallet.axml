@@ -10,7 +10,7 @@
       </view>
       <view class="zan-c-gray-dark zan-font-14">我的余额</view>
       <view class="money" style="color:#f15b6c">￥<text class="">{{account}}</text></view>
-      <navigator class="zan-btn zan-btn--primary" style="margin-top:120rpx;" url="/page/wallet-topup/wallet-topup">马上充值</navigator>
+      <button class="zan-btn zan-btn--primary {{showTopup?'zan-btn--disabled':''}}" style="margin-top:120rpx;" disabled="{{showTopup}}" onTap="goTopup">马上充值</button>
     </view>
   </view>
 </view>

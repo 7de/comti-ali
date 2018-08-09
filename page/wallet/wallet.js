@@ -4,8 +4,9 @@ const app = getApp()
 const URL = 'wallet/customWallet/queryBalanceBySession' // 账户余额
 Page({
   data: {
-    showLoading: false,
+    showLoading: true,
     account: '--',
+    showTopup: true
   },
   onLoad() {
   },
@@ -13,13 +14,18 @@ Page({
     // 账户余额查询
     api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
       console.log(res)
-      if (res.code === -1) {
-        console.log('报错了')
-      }
+      my.hideLoading()
       this.setData({
         showLoading: false,
+        showTopup: false,
         account: parseFloat(api.fotmatMoney(res.data))
       })
+    })
+  },
+  // 跳转在线充值
+  goTopup() {
+    my.navigateTo({
+      url: '/page/wallet-topup/wallet-topup?account=' + this.data.account
     })
   }
 });

@@ -7,16 +7,16 @@ Page({
     showLoading: false,
     items: [
       {
-        value: '1000',
-        name: '充￥1000'
-      },
-      {
-        value: '500',
-        name: '充￥500'
+        value: '200',
+        name: '充￥200'
       },
       {
         value: '100',
         name: '充￥100'
+      },
+      {
+        value: '80',
+        name: '充￥80'
       },
       {
         value: '50',
@@ -25,6 +25,18 @@ Page({
       {
         value: '20',
         name: '充￥20'
+      },
+      {
+        value: '10',
+        name: '充￥10'
+      },
+      {
+        value: '5',
+        name: '充￥5'
+      },
+      {
+        value: '3',
+        name: '充￥3'
       },
       {
         value: 'oth',
@@ -37,9 +49,13 @@ Page({
     focus: true,
     account: '--' // 账户余额
   },
-  onLoad() {},
+  onLoad(query) {
+    this.setData({
+      account: query.account
+    })
+  },
   onShow() {
-    my.showLoading({
+    /* my.showLoading({
       content: '余额查询中...'
     })
     // 账户余额查询
@@ -52,7 +68,7 @@ Page({
           account: parseFloat(api.fotmatMoney(res.data))
         })
       }
-    })
+    }) */
   },
   blurInput(e) {
     let _floatMoney = parseFloat(e.detail.value)
@@ -103,6 +119,7 @@ Page({
         content: '请确认是否充值' + _money + '元',
         confirmButtonText: '马上充值',
         success: (result) => {
+          const _this = this
           if (result.confirm) {
             my.showLoading({
               content: '充值中...'
@@ -113,13 +130,36 @@ Page({
               my.tradePay({
                 orderStr: _data, //完整的支付参数拼接成的字符串，从服务端获取
                 success: (res) => {
-                  my.navigateBack({
-                    delta: 1
-                  })
+                  console.log(res.resultCode)
+                  console.log(typeof res.resultCode)
+                  if (parseInt(res.resultCode) === 9000){
+                    my.navigateBack({
+                      delta: 1
+                    })
+                  } else {
+                    let _msg = '' 
+                    if (parseInt(res.resultCode) === 8000) {
+                      _msg = '正在处理中'
+                    } else if (parseInt(res.resultCode) === 6004) {
+                      _msg = '支付结果未知,请查询商户订单列表中订单的支付状态'
+                    } else {
+                      _msg = '充值失败，请稍后再试'
+                    }
+                    my.alert({
+                      title: '温馨提示',
+                      content: _msg,
+                      buttonText: '我知道了',
+                      success: () => {
+                        my.navigateBack({
+                          delta: 1
+                        })
+                      }
+                    })
+                  }
                 },
                 fail: (res) => {
                   my.alert({
-                    title: '提示',
+                    title: '错误提示',
                     content: '充值失败，请稍后再试',
                     buttonText: '我知道了'
                   })
@@ -130,5 +170,17 @@ Page({
         },
       })
     }
+  },
+  // 更新账户余额
+  getMoney() {
+    api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
+      my.hideLoading()
+      console.log(res)
+      if(res.code === 0) {
+        this.setData({
+          account: parseFloat(api.fotmatMoney(res.data))
+        })
+      }
+    })
   }
 });

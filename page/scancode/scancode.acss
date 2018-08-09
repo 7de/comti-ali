@@ -1,3 +1,4 @@
+@import "/page/component/loading-page/loading-page.acss";
 .scan-box>.zan-panel{
     margin-top: 30rpx;
 }
@@ -31,4 +32,9 @@
 }
 .scan-btn button>text{
     margin-left: 5px;
+}
+.scan-btn button.zan-btn--disabled{
+    background-color: #f8f8f8;
+    border-color:#e5e5e5;
+    color:#999;
 }

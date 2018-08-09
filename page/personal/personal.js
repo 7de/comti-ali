@@ -6,7 +6,8 @@ Page({
   data: {
     user:{
       name: '加载中...',
-      img: ''
+      img: '',
+      city: ''
     },
     pathdata: {
         list:[
@@ -57,44 +58,24 @@ Page({
           path: '../about/about'
         }
       ]
-    }
+    },
+    showLoading: false
+  },
+  onLoad() {
   },
   onShow() {
-    if (app.globalData.nickName) {
-      console.log('全局有')
-      this.setData({
-        user:{
-          name: app.globalData.nickName,
-          img: app.globalData.avatar
-        }
-      })
-    } else {
-      my.getAuthCode({
-        scopes: 'auth_user',
-        success: (res) => {
-          my.getAuthUserInfo({
-            success: (userInfo) => {
-              this.setData({
-                user:{
-                  name: userInfo.nickName,
-                  img: userInfo.avatar
-                }
-              })
-              app.globalData.nickName = userInfo.nickName
-              app.globalData.avatar = userInfo.avatar
-            }
-          })
-        }
-      })
-    }
-    console.log('个人中心' + app.globalData.token)
-      /* api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
-        console.log(res)
-        if (res.code === 0) {
-          console.log(res)
-          console.log('获取信息')
-        }
-      }) */
+    api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
+      if (res.code === 0) {
+        this.setData({
+          showLoading: false,
+          user:{
+            name: res.data.nickName ? res.data.nickName : '未知用户',
+            img: res.data.avatarUrl ? res.data.avatarUrl : '/images/user_2.png',
+            city: res.data.city ?  res.data.city : '未知'
+          }
+        })
+      }
+    })
   },
   clearStorage() {
     my.confirm({

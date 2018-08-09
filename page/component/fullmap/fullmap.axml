@@ -7,7 +7,6 @@
     controls="{{mapcontrols}}"
     onControlTap="controltap"
     markers="{{markers}}" 
-    polyline="{{polyline}}" 
     onMarkerTap="markertap" show-location>
   </map>
 </template>

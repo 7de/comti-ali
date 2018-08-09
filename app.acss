@@ -145,3 +145,7 @@ page {
 }
 
 /* 按钮primary背景颜色 --end*/
+
+.display-none {
+  display: none
+}

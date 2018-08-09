@@ -2,9 +2,9 @@ import page from './page.js'
 export default {
     apiData : {
       // 正式
-      // host: 'https://www.comtti.net/',
+      host: 'https://www.comtti.net/',
       // 测试
-      host: 'https://actor.comtti.net/pc/'
+      // host: 'https://actor.comtti.net/pc/'
     },
     _request(method, url, params, header = {}) {
       const {
@@ -22,6 +22,7 @@ export default {
             const {
               data
             } = res
+            my.hideLoading()
             if (data.code === 500) {
               my.showToast({
                 content: '服务器错误，请联系管理员',
@@ -40,9 +41,9 @@ export default {
                   content: '授权过期',
                   buttonText: '去授权',
                   success: () => {
-                      my.navigateTo({
-                          url: '../authorize/authorize'
-                      })
+                    my.navigateTo({
+                        url: '../authorize/authorize'
+                    })
                   }
                 })
             } else if (res.status === 500) {
@@ -55,8 +56,16 @@ export default {
               resolve(data)
             }
           },
-          fail: res => {
-            console.log('请求失败：' + res)
+          fail: ({data}) => {
+            console.log(data)
+            my.hideLoading()
+            my.alert({
+              title: '错误提示',
+              content: data.msg + ' ' + data.status,
+              buttonText: '我知道了',
+              success: () => {
+              }
+            })
           }
         })
       })

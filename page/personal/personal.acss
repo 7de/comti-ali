@@ -1,4 +1,5 @@
 @import "/page/component/list/list.acss";
+@import "/page/component/loading-page/loading-page.acss";
 .userinfo-avatar-img {
   border-radius: 50px;
   width: 50px;

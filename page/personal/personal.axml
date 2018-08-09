@@ -1,53 +1,62 @@
 <import src="/page/component/list/list.axml" />
+<import src="/page/component/loading-page/loading-page.axml"/>
 <view class="container">
-  <view class="person_hd page-description" >
-    <view class="a-list">
-      <view class="a-list-items">
-        <view class="a-list-item padding-20">
-          <image class="userinfo-avatar-img" src="{{user.img}}" mode="scaleToFill"/>
-          <text class="a-list-item-content">{{user.name}}</text>
+  <block a:if="{{showLoading}}">
+    <template is="loadingpage"/>
+  </block>
+  <block a:else>
+    <view class="person_hd page-description" >
+      <view class="a-list">
+        <view class="a-list-items">
+          <view class="a-list-item padding-20">
+            <image class="userinfo-avatar-img" src="{{user.img}}" mode="scaleToFill"/>
+            <text class="a-list-item-content zan-font-12">
+              <text style="display:block"><text class="zan-c-gray-darker">昵称：</text>{{user.name}}</text>
+              <text><text class="zan-c-gray-darker">城市：</text>{{user.city}}</text>
+            </text>
+          </view>
         </view>
       </view>
     </view>
-  </view>
-  <view class="page_spacing">
-    <view class="a-list page-description">
-      <view class="a-list-items">
-        <navigator class="a-list-item am-list-item-middle" hover-class="a-list-item-hover" url ="/page/order/order">
-            <view class="a-list-item-line">
-              <text class="a-list-item-content">我的订单</text>
-              <view class="a-list-item-extra" >查看更多订单</view>
-              <view class="a-list-arrow a-list-arrow-horizontal" />
-              <view class="a-list-item-bottom" />
+    <view class="page_spacing">
+      <view class="a-list page-description">
+        <view class="a-list-items">
+          <navigator class="a-list-item am-list-item-middle" hover-class="a-list-item-hover" url ="/page/order/order">
+              <view class="a-list-item-line">
+                <text class="a-list-item-content">我的订单</text>
+                <view class="a-list-item-extra" >查看更多订单</view>
+                <view class="a-list-arrow a-list-arrow-horizontal" />
+                <view class="a-list-item-bottom" />
+              </view>
+            </navigator >
+            <view class="a-list-item padding-20 flex-justify-around text-center ">
+              <navigator class="a-col" url ="/page/order/order?selectedId=0">
+                <view class="iconfont icon-electrical"></view>
+                <text class="col-classname">充电中</text>
+              </navigator>
+              <navigator class="a-col" url ="/page/order/order?selectedId=1">
+                <view class="iconfont icon-trust"></view>
+                <text class="col-classname">已完成</text>
+              </navigator>
+              <navigator class="a-col" url ="/page/order/order?selectedId=2">
+                <view class="iconfont icon-history" ></view>
+                <text class="col-classname">已关闭</text>
+              </navigator>
             </view>
-          </navigator >
-          <view class="a-list-item padding-20 flex-justify-around text-center ">
-            <navigator class="a-col" url ="/page/order/order?selectedId=0">
-              <view class="iconfont icon-electrical"></view>
-              <text class="col-classname">充电中</text>
-            </navigator>
-            <navigator class="a-col" url ="/page/order/order?selectedId=1">
-              <view class="iconfont icon-trust"></view>
-              <text class="col-classname">已完成</text>
-            </navigator>
-            <navigator class="a-col" url ="/page/order/order?selectedId=2">
-              <view class="iconfont icon-history" ></view>
-              <text class="col-classname">已关闭</text>
-            </navigator>
-          </view>
+        </view>
       </view>
-    </view>
-    <template is="list" data="{{...pathdata}}"/>
-    <template is="list" data="{{...settingData}}"/>
-    <view class="a-list page-description">
-      <view class="a-list-items">
-        <view class="a-list-item" onTap="clearStorage">
-          <view class="a-list-item-line">
-            <view class="iconfont icon-remind ico-personal"></view>
-            <text class="a-list-item-content">清除本地缓存</text>
+      <template is="list" data="{{...pathdata}}"/>
+      <template is="list" data="{{...settingData}}"/>
+      <view class="a-list page-description">
+        <view class="a-list-items">
+          <view class="a-list-item" onTap="clearStorage">
+            <view class="a-list-item-line">
+              <view class="iconfont icon-remind ico-personal"></view>
+              <text class="a-list-item-content">清除本地缓存</text>
+            </view>
           </view>
         </view>
       </view>
     </view>
-  </view>
+  </block>
 </view>

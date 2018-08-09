@@ -52,6 +52,8 @@ Page({
     changeFee: '0.00', // 充电费
     serviceFee: '0.00', // 服务费
     totalFee: '0.00', // 总费用
+    showTopup: true,  // 是否显示充值按钮
+    showLoading: true
   },
   onLoad(query) {
     if (query.num) {
@@ -69,13 +71,11 @@ Page({
   },
   onShow(){
     // 账户余额查询
-    my.showLoading({
-      content: '余额查询中...'
-    })
     api.get(balaneURL + 'queryBalanceBySession?rdSession=' + app.globalData.token).then(res => {
-      my.hideLoading()
       if (res.code === 0) {
         this.setData({
+          showLoading: false,
+          showTopup: false,
           account: parseFloat(api.fotmatMoney(res.data))
         })
       }
@@ -225,23 +225,21 @@ Page({
               }
             }
           })
-        } else if (res.data.code === 0) {
-          /* if(this.data.checkedValue < 0) {
-            my.alert({
-              title: '提示',
-              content: '请选择充电时长进行充电',
-              buttonText: '我知道了',
-              success: () => {
-                console.log('已通知')
-              }
-            })
-          } */
+        } else if (res.data.code === -50) {
+          this.timeoutEqui(res.data.msg)
+        }  else if (res.data.code === 0) {
         } else {
           my.showToast({
             content: res.data.msg,
             type: 'none',
             duration: 2000
           })
+        }
+      },
+      fail: res => {
+        console.log(res)
+        if (res.data.code === -50) {
+          this.timeoutEqui(res.data.msg)
         }
       }
     })
@@ -273,6 +271,23 @@ Page({
           checkedValue: -1
         })
       }
+    })
+  },
+  // 设备超时
+  timeoutEqui(msg) {
+    my.alert({
+      title: '温馨提示',
+      content: res.data.msg,
+      buttonText: '重试',
+      success: () => {
+        this.checkEqui()
+      }
+    })
+  },
+  // 跳转在线充值
+  goTopup() {
+    my.navigateTo({
+      url: '/page/wallet-topup/wallet-topup?account=' + this.data.account
     })
   }
 });

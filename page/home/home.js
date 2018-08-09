@@ -70,33 +70,10 @@ Page({
           currentMarkersLong: _markers[v].longitude,
           currentMarkersLati: _markers[v].latitude,
           currentMarkerName: _markers[v]['callout'].siteName,
-          currentMarkerAddr: _markers[v]['callout'].siteAddress,
-          polyline: [
-            {
-              points: [{ // 连线起点
-                longitude: this.data.map.longitude,
-                latitude: this.data.map.latitude
-              }, { // 连线终点(当前点击的标记)
-                longitude: _markers[v].longitude,
-                latitude: _markers[v].latitude
-              }],
-              color: '#1AAD19', // 连线颜色
-              width: 3, // 连线宽度
-              dottedLine: true, // 虚线
-              arrowLine: true
-            }
-          ]
+          currentMarkerAddr: _markers[v]['callout'].siteAddress
         })
       }
     }
-    /* for (var i=0;i<_len;i++) {
-      if (_markers[i].id === markerId){
-        this.setData({
-          markersinfo: _markers[i].callout
-        })
-        console.log('标签信息' + _markers[i].callout.siteName)
-      }
-    } */
     if (!this.data.showPopup && this.data.oldMarkerID !== markerId) {
         this.setData({
           oldMarkerID: markerId,
@@ -115,7 +92,6 @@ Page({
     this.setData({
       showPopup: false
     })
-    console.log('关闭')
   },
 
   // 地图控件
@@ -232,7 +208,7 @@ Page({
         // api.get(equiUrl + '?rdSession=' + app.globalData.token + '&tagsFlag=true' + '&serialNo=' + _code).then(res => {
         api.get(equiUrl, _params).then(res => {
           my.hideLoading()
-          my.reLaunch({
+          my.navigateTo({
             url: '/page/scancode/scancode?num=' + _code
           })
         })
@@ -262,7 +238,6 @@ Page({
     my.showLoading({
       content: '订单查询中...'
     })
-    // api.get(orderURL + 'queryOrderNoListMobile?orderStatus=0&rdSession=' + this.$parent.token + '&pageNum=1&pageSize=10').then(({data}) => {
     api.get(orderURL + 'queryOrderNoListMobile', _params).then(({data}) => {
       my.hideLoading()
       let _len = data.length

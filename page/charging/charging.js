@@ -21,6 +21,10 @@ Page({
     progress_num: 0
   },
   onLoad(option) {
+    setTimeout(() => {
+      this.showLoading = false
+      this.$apply()
+    }, 1500)
     this.setData({
       order_no: option.orderNo,
       time: option.time,
