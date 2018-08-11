@@ -275,12 +275,15 @@ Page({
   },
   // 设备超时
   timeoutEqui(msg) {
-    my.alert({
+    const _this = this
+    my.confirm({
       title: '温馨提示',
-      content: res.data.msg,
-      buttonText: '重试',
-      success: () => {
-        this.checkEqui()
+      content: msg,
+      confirmButtonText: '重试',
+      success: (result) => {
+        if (result.confirm) {
+          _this.checkEqui()
+        }
       }
     })
   },
