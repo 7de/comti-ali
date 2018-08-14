@@ -80,7 +80,8 @@ Page({
   clearStorage() {
     my.confirm({
       title: '温馨提示',
-      content: '请确定是否清除本地缓存？',
+      content: '清除本地缓存将重新授权，是否继续？',
+      confirmButtonText: '继续',
       success: (result) => {
         if (result.confirm) {
           my.clearStorageSync()
