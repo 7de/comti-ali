@@ -4,6 +4,7 @@ const app = getApp()
 const balaneURL = 'wallet/customWallet/' // 钱包
 const chargrURL = 'server/' // 开始充电
 const equiUrl = 'equip/equipSocket/querySocketStatus' // 查询设备
+const formUrl = 'messagepush/service-push'
 
 Page({
   data: {
@@ -42,13 +43,14 @@ Page({
         name: '12小时'
       }
     ],
-    checkedValue: -1,
+    checkedValue: '120',
     itemsDis: false, // 不可用
+    submitDisabled: true, // 提交按钮不可用
     // butDis: true,
     index: 0,
     account: '加载中...',
-    time_value: 0, // 时长
-    charger_mode: null, // 充电模式
+    time_value: 12, // 时长
+    charger_mode: 3, // 充电模式
     changeFee: '0.00', // 充电费
     serviceFee: '0.00', // 服务费
     totalFee: '0.00', // 总费用
@@ -68,20 +70,30 @@ Page({
         code: _code
       })
     }
+    if (app.globalData.token) {
+      this.getBalance()
+      this.checkEqui()
+    } else {
+      my.alert({
+        title: '温馨提示',
+        content: '您暂未授权或授权已过期',
+        buttonText: '去授权',
+        success: () => {
+          page.goAuthorizeB()
+        }
+      })
+    }
   },
   onShow(){
-    // 账户余额查询
-    api.get(balaneURL + 'queryBalanceBySession?rdSession=' + app.globalData.token).then(res => {
-      if (res.code === 0) {
-        this.setData({
-          showLoading: false,
-          showTopup: false,
-          account: parseFloat(api.fotmatMoney(res.data))
-        })
-      }
-    })
-    // 设备查询
-    this.checkEqui()
+    if (!this.data.itemsDis) {
+      let _params = Object.assign({
+        serialNum: this.data.code,
+        chargeTime: this.data.time_value
+      })
+      this.checkMoney(_params)
+    } else {
+      this.equiDisabledFun()
+    }
   },
   radioChange(e) {
     let _value = e.detail.value
@@ -125,9 +137,98 @@ Page({
       this.checkEqui()
     }
   },
-  goCharging() {
+  /* goCharging() {
     const _this = this
     if (this.data.checkedValue < 0) {
+      my.showToast({
+        content: '请选择充电时长',
+        type: 'none'
+      })
+    } else if (this.data.itemsDis){
+      this.checkEqui()
+    } else {
+      my.confirm({
+        title: '温馨提示',
+        content: '请确认是否开始充电？',
+        success: (result) => {
+          if(result.confirm) {
+            let _params = Object.assign({
+              chargerMode: parseInt(this.data.charger_mode),
+              chargerValue: this.data.time_value,
+              streamNo: this.data.code,
+              totalFee: this.data.totalFee * 100
+            })
+            my.showLoading({
+              content: '开启充电...'
+            })
+            this.setData({
+              submitDisabled: true
+            })
+            my.httpRequest({
+              url: api.apiData.host + chargrURL + 'chargeStart?rdSession=' + app.globalData.token,
+              method: 'POST',
+              headers: Object.assign({
+                'content-type': 'application/json'
+              }),
+              data: JSON.stringify({
+                chargerMode: parseInt(this.data.charger_mode),
+                chargerValue: this.data.time_value,
+                streamNo: this.data.code,
+                totalFee: this.data.totalFee * 100
+              }),
+              dataType: 'json',
+              success: (res) => {
+                my.hideLoading()
+                const {data} = res
+                this.setData({
+                  submitDisabled: false
+                })
+                if (data.code === 500 || res.status === 500) {
+                  my.showToast({
+                    content: '服务器错误，请联系管理员',
+                    type: 'fail ',
+                    duration: 2000
+                  })
+                } else if (data.code === -100) {
+                  my.alert({
+                    title: '提示',
+                    content: '授权过期',
+                    buttonText: '去授权',
+                    success: () => {
+                        my.navigateTo({
+                            url: '../authorize/authorize'
+                        })
+                    }
+                  })
+                } else if (data.code === 0) {
+                  my.reLaunch({
+                    url: '/page/charging/charging?orderNo=' + data.data + '&time=' + _this.data.time_value + '&equipNo=' + _this.data.code
+                  })
+                } else {
+                  my.showToast({
+                    content: data.msg,
+                    type: 'none'
+                  })
+                }
+              }
+            })
+          }
+        }
+      })
+    }
+  }, */
+  formSubmit(e) {
+    console.log(e)
+    const _this = this
+    let _formId = e.detail.formId
+    console.log(_formId)
+    api.get(formUrl, {formId: _formId}).then(res => {
+      console.log(res)
+    })
+    console.log(_formId)
+    if (this.data.itemsDis) {
+      this.checkEqui()
+    } else if (this.data.checkedValue < 0){
       my.showToast({
         content: '请选择充电时长',
         type: 'none'
@@ -147,6 +248,9 @@ Page({
             my.showLoading({
               content: '开启充电...'
             })
+            this.setData({
+              submitDisabled: true
+            })
             my.httpRequest({
               url: api.apiData.host + chargrURL + 'chargeStart?rdSession=' + app.globalData.token,
               method: 'POST',
@@ -163,6 +267,9 @@ Page({
               success: (res) => {
                 my.hideLoading()
                 const {data} = res
+                this.setData({
+                  submitDisabled: false
+                })
                 if (data.code === 500 || res.status === 500) {
                   my.showToast({
                     content: '服务器错误，请联系管理员',
@@ -181,7 +288,7 @@ Page({
                     }
                   })
                 } else if (data.code === 0) {
-                  my.redirectTo({
+                  my.reLaunch({
                     url: '/page/charging/charging?orderNo=' + data.data + '&time=' + _this.data.time_value + '&equipNo=' + _this.data.code
                   })
                 } else {
@@ -208,38 +315,50 @@ Page({
       success: res => {
         console.log(res)
         my.hideLoading()
-        if (res.data.code === -1) {
-          let _msg = res.data.msg
+        if (res.data.code === 0) {
+          this.setData({
+            itemsDis: false,
+            showLoading: false,
+            showTopup: false,
+          })
+        } else {
           this.setData({
             itemsDis: true,
             items: this.data.items,
             checkedValue: -1
           })
-          my.confirm({
-            title: '温馨提示',
-            content: _msg,
-            confirmButtonText: '首页扫码',
-            success: (result) => {
-              if (result.confirm) {
-                page.goHome()
+          this.equiDisabledFun()
+          if (res.data.code === -50) {
+            this.timeoutEqui(res.data.msg)
+          } else {
+            let _msg = res.data.msg
+            my.confirm({
+              title: '错误提示',
+              content: _msg,
+              confirmButtonText: '首页扫码',
+              success: (result) => {
+                if (result.confirm) {
+                  page.goHome()
+                }
               }
-            }
-          })
-        } else if (res.data.code === -50) {
-          this.timeoutEqui(res.data.msg)
-        }  else if (res.data.code === 0) {
-        } else {
-          my.showToast({
-            content: res.data.msg,
-            type: 'none',
-            duration: 2000
-          })
+            })
+          }
         }
       },
       fail: res => {
         console.log(res)
         if (res.data.code === -50) {
           this.timeoutEqui(res.data.msg)
+        } else {
+          my.confirm({
+            title: '错误提示',
+            content: '网络异常，请稍后重试',
+            confirmButtonText: '好的',
+            success: (result) => {
+              if (result.confirm) {
+              }
+            }
+          })
         }
       }
     })
@@ -285,6 +404,31 @@ Page({
           _this.checkEqui()
         }
       }
+    })
+  },
+  // 账户余额查询
+  getBalance() {
+    api.get(balaneURL + 'queryBalanceBySession', {
+      rdSession: app.globalData.token
+    }).then(res => {
+      if (res.code === 0) {
+        this.setData({
+          showLoading: false,
+          showTopup: false,
+          submitDisabled: false,
+          account: parseFloat(api.fotmatMoney(res.data))
+        })
+      }
+    })
+  },
+  // 设备不可用,时长默认不选择,预估金额为零
+  equiDisabledFun() {
+    this.setData({
+      checked_base: -1,
+      time_value: 0,
+      changeFee: api.fotmatMoney(0),
+      serviceFee: api.fotmatMoney(0),
+      totalFee: api.fotmatMoney(0)
     })
   },
   // 跳转在线充值

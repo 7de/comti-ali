@@ -35,7 +35,7 @@
                 <text class="col-classname">充电中</text>
               </navigator>
               <navigator class="a-col" url ="/page/order/order?selectedId=1">
-                <view class="iconfont icon-trust"></view>
+                <view class="iconfont icon-wc"></view>
                 <text class="col-classname">已完成</text>
               </navigator>
               <navigator class="a-col" url ="/page/order/order?selectedId=2">

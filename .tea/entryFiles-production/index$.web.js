@@ -16,3 +16,7 @@ require('../../page/about/about');
 require('../../page/scancode/scancode');
 require('../../page/charging/charging');
 require('../../page/authorize/authorize');
+require('../../page/cooperation/cooperation');
+require('../../page/card/card');
+require('../../page/card-detail/card-detail');
+require('../../page/card-add/card-add');

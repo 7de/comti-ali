@@ -9,6 +9,9 @@
     </view>
     <view class="zan-panel">
       <view class="zan-cell">
+        <view class="zan-cell__bd"><view class="charging_title">站点名称</view><text class="">{{chargData.siteName}}</text></view>
+      </view>
+      <view class="zan-cell">
         <view class="zan-cell__bd"><view class="charging_title">设备编码</view><text class="">{{chargData.socketSeq}}</text></view>
       </view>
       <view class="zan-cell">

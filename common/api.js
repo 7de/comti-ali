@@ -2,9 +2,9 @@ import page from './page.js'
 export default {
     apiData : {
       // 正式
-      host: 'https://www.comtti.net/',
+      // host: 'https://www.comtti.net/',
       // 测试
-      // host: 'https://actor.comtti.net/pc/'
+      host: 'https://actor.comtti.net/pc/'
     },
     _request(method, url, params, header = {}) {
       const {
@@ -56,16 +56,31 @@ export default {
               resolve(data)
             }
           },
-          fail: ({data}) => {
-            console.log(data)
+          fail: (err) => {
+            // let _msg = err.data.msg ? err.data.msg : err.errMsg ? err.errMsg : err.error
             my.hideLoading()
-            my.alert({
-              title: '错误提示',
-              content: data.msg + ' ' + data.status,
-              buttonText: '我知道了',
-              success: () => {
-              }
-            })
+            console.log('请求超时')
+            if (err.errMsg === 'request:fail timeout') {
+              my.confirm({
+                title: '错误提示',
+                content: '请求超时，请稍后重试',
+                confirmButtonText: '好的',
+                success: (result) => {
+                  if (result.confirm) {
+                  }
+                }
+              })
+            } else {
+              my.confirm({
+                title: '错误提示',
+                content: '网络异常，请稍后重试',
+                confirmButtonText: '好的',
+                success: (result) => {
+                  if (result.confirm) {
+                  }
+                }
+              })
+            }
           }
         })
       })
@@ -129,5 +144,10 @@ export default {
     // 1秒(s)=1000毫秒(ms)
     formatMs(time) {
       return time * 3600000
+    },
+    // 智能卡显示规则 第4位自动空一格
+    fotmatCard(str) {
+      var _str = str.replace(/\s/g,'').replace(/(.{4})/g,"$1 ")
+      return _str
     }
 }

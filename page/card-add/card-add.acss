@@ -1,0 +1,14 @@
+.card-box{
+  padding: 30rpx;
+}
+.oth-input{
+  width: 80%;
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+  border:none;
+}
+.card-wrong .icon-wrong{
+    color:red;
+    padding-right:10px;
+}

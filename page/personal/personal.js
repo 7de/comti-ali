@@ -24,6 +24,12 @@ Page({
           path: '../wallet/wallet'
         },
         {
+          iconfont: 'card',
+          arrow: 'horizontal',
+          title: '我的卡包',
+          path: '../card/card'
+        },
+        {
           iconfont: 'manageorder',
           arrow: 'horizontal',
           title: '充值记录',
@@ -45,17 +51,22 @@ Page({
           title: '帮助反馈',
           path: '../help/help'
         }, */
-        /* {
+        {
           iconfont: 'set',
           arrow: 'horizontal',
           title: '系统设置',
           path: '../setting/setting'
-        }, */
+        },
         {
           iconfont: 'information',
           arrow: 'horizontal',
           title: '关于我们',
           path: '../about/about'
+        },
+        {
+          iconfont: 'trust',
+          title: '商户合作申请',
+          path: '../cooperation/cooperation'
         }
       ]
     },
@@ -64,18 +75,33 @@ Page({
   onLoad() {
   },
   onShow() {
-    api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
-      if (res.code === 0) {
-        this.setData({
-          showLoading: false,
-          user:{
-            name: res.data.nickName ? res.data.nickName : '未知用户',
-            img: res.data.avatarUrl ? res.data.avatarUrl : '/images/user_2.png',
-            city: res.data.city ?  res.data.city : '未知'
-          }
-        })
-      }
-    })
+    console.log(app.globalData.token)
+    if (app.globalData.token) {
+      api.get(URL, {
+        rdSession: app.globalData.token
+      }).then(res => {
+        if (res.code === 0) {
+          this.setData({
+            showLoading: false,
+            user:{
+              name: res.data.nickName ? res.data.nickName : '未知用户',
+              img: res.data.avatarUrl ? res.data.avatarUrl : '/images/user_2.png',
+              city: res.data.city ?  res.data.city : '未知'
+            }
+          })
+        }
+      })
+    } else {
+      my.alert({
+        title: '温馨提示',
+        content: '您暂未授权或授权已过期',
+        buttonText: '去授权',
+        success: (result) => {
+          page.goAuthorize()
+        }
+      })
+    }
+    
   },
   clearStorage() {
     my.confirm({

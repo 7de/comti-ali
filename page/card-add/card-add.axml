@@ -1,0 +1,44 @@
+<view class="container">
+  <view class="page_spacing">
+    <view class="zan-panel zan-panel--radius card-wrong" a:if="{{invalidCard || status==2}}">
+      <view class="zan-cell">
+        <view class="iconfont icon-wrong zan-font-22"></view>
+        <view class="zan-cell__bd">这是一张无效的卡</view>
+      </view>
+    </view>
+    <block a:else>
+      <view class="zan-panel zan-panel--radius">
+        <view class="card-box">
+          <view class="zan-font-14 zan-c-gray-dark">智能卡号：</view>
+          <view class="zan-font-26 margin-top-10">{{newCode}}</view>
+          <view class="zan-font-12 zan-c-gray-dark margin-top-10">所属商户：{{cardData.orgName ? cardData.orgName:''}}</view>
+        </view>
+      </view>
+      <view class="zan-panel zan-panel--radius">
+        <view class="zan-cell">
+          <view class="zan-cell__bd zan-c-gray-dark">用户昵称：{{cardData.nickName ? cardData.nickName : name}}</view>
+          <view class="zan-cell__ft">
+            <button class="zan-btn zan-btn--warn zan-btn--mini" style="background:#FF7300;padding:0 8px;" a:if="{{status===0}}" onTap="bindingBtn">点击绑定</button>
+          </view>
+        </view>
+      </view>
+      <view class="zan-panel zan-panel--radius card-input">
+        <view class="zan-cell zan-cell--noborder" style="padding-bottom:0;padding-top:70rpx">
+          <view class="zan-cell__bd" style="overflow:hidden;">
+            <view class="scan-subtitle zan-pull-left">
+              <view class="iconfont zan-font-26">￥</view>
+            </view>
+            <input class="zan-pull-left oth-input" type="digit" value="{{money_input}}" name="moneyinp" placeholder="请输入充值金额" bindblur="bindblur"/>
+          </view>
+        </view>
+        <view class="zan-hairline--top" style="margin:0 30rpx"></view>
+        <view class="zan-cell">
+          <view class="zan-cell__bd zan-font-14 zan-c-gray-dark">余额：<text class="zan-c-{{cardData.state==1?'gray-dark':'red'}}">{{cardData.state==1?'***' : account}}元</text></view>
+        </view>
+      </view>
+      <view>
+        <button class="zan-btn zan-btn--primary {{(status!==1 || showBtn)?'zan-btn--disabled':''}}" style="margin-top:130rpx;" onTap="topup" disabled="{{status!==1 || showBt}}">在线充值</button>
+      </view>
+    </block>
+  </view>
+</view>

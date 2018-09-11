@@ -15,7 +15,11 @@
     "page/about/about",
     "page/scancode/scancode",
     "page/charging/charging",
-    "page/authorize/authorize"
+    "page/authorize/authorize",
+    "page/cooperation/cooperation",
+    "page/card/card",
+    "page/card-detail/card-detail",
+    "page/card-add/card-add"
   ],
   "window": {
     "enableWK": "YES",

@@ -197,20 +197,27 @@ Page({
         let _qr = decodeURIComponent(res.qrCode)
         let _qrBox = _qr.split('num=')
         let _code = _qrBox[1]
-        let _params = Object.assign({
-          rdSession: app.globalData.token,
-          tagsFlag: true,
-          serialNo: _code
-        })
-        my.showLoading({
-          content: '查询设备...'
-        })
-        // api.get(equiUrl + '?rdSession=' + app.globalData.token + '&tagsFlag=true' + '&serialNo=' + _code).then(res => {
-        api.get(equiUrl, _params).then(res => {
-          my.hideLoading()
+        if (_code) {
           my.navigateTo({
             url: '/page/scancode/scancode?num=' + _code
           })
+        } else {
+          my.alert({
+            title: '错误提示',
+            content: '设备编号有误，请重新扫码',
+            buttonText: '好的',
+            success: () => {
+            }
+          })
+        }
+      },
+      fail: () => {
+        my.alert({
+          title: '错误提示',
+          content: '扫码失败，请重新扫码',
+          buttonText: '好的',
+          success: () => {
+          }
         })
       }
     })

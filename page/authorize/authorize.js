@@ -20,17 +20,6 @@ Page({
           success: (userInfo) => {
             app.globalData.nickName = userInfo.nickName
             app.globalData.avatar = userInfo.avatar
-            my.setStorageSync({
-              key: 'nickname',
-              data: userInfo.nickName
-            })
-            my.setStorageSync({
-              key: 'userinfo',
-              data: {
-                nickname: userInfo.nickName,
-                avatar: userInfo.avatar
-              }
-            })
           }
         })
         // 请求换取令牌

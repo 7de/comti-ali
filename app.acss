@@ -72,7 +72,9 @@ page {
 .padding-right-30{
   padding-right: 30rpx;
 }
-
+.margin-top-10{
+  margin-top: 10rpx;
+}
 .margin-top-15{
   margin-top: 15rpx;
 }

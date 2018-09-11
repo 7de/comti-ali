@@ -1,0 +1,16 @@
+<template name="comcard">
+  <block a:for="{{data}}" a:key="index" a:for-index="index" a:for-item="item" class="zan-panel">
+    <view class="card-box flex-wrp card-box--{{(index%5===0) ? 'purple' : (index%4===0) ? 'freshgreen' : index%3==0 ? 'orange' : index%2 ? 'blue' : 'green'}}" onTap="gotoDetail({{item.code}})">
+      <view class="card-item flex-item logo">
+        <image style="width: 60rpx;height:60rpx" mode="scaleToFill" src="../../../images/card_logo.png" />
+      </view>
+      <view class="card-item text">
+        <view class="zan-font-12 title">{{item.orgName ? item.orgName : ' '}}</view>
+        <text class="zan-font-22">{{item.code ? item.code : ' '}}</text>
+      </view>
+      <view class="card-item bg">
+        <image style="width: 160rpx; height:90rpx;display:block" src="../../../images/code_bg.png" />
+      </view>
+    </view>
+  </block>
+</template>

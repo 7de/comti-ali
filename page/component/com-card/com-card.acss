@@ -1,0 +1,37 @@
+.card-box{
+  color:#fff;
+  border-radius: 4px;
+  margin-top: 30rpx;
+  padding-top:30rpx;
+  padding-left: 30rpx;
+  position: relative;
+}
+.card-box .logo{
+    margin-right: 25rpx;
+}
+.card-box .text{
+    padding-bottom: 30rpx;
+}
+.card-box .text .title{
+    margin-bottom: 15rpx;
+}
+.card-box .bg{
+    position: absolute;
+    bottom:0;
+    right:0
+}
+.card-box--green{
+  background-color: #df7879;
+}
+.card-box--blue{
+  background-color: #17b1cd;
+}
+.card-box--orange{
+  background-color: #ffb935;
+}
+.card-box--freshgreen{
+  background-color: #3ccf9e;
+}
+.card-box--purple{
+  background-color: #ad83c6;
+}

@@ -11,6 +11,12 @@ export default {
       url: '/page/authorize/authorize'
     })
   },
+  // 返回授权
+  goAuthorizeB() {
+    wepy.navigateTo({
+      url: '/page/authorize/authorize'
+    })
+  },
   // 返回上一级
   goBack() {
     my.navigateBack({
