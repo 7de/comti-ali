@@ -4,20 +4,23 @@ export default {
       // 正式
       // host: 'https://www.comtti.net/',
       // 测试
-      host: 'https://actor.comtti.net/pc/'
+      host: 'https://actor.comtti.net/pc/',
+      token: my.getStorageSync({key: 'token'})
     },
     _request(method, url, params, header = {}) {
       const {
-        host
+        host,
+        token
       } = this.apiData
       return new Promise((resolve, reject) => {
         my.httpRequest({
           url: `${host}${url}`,
           method: method,
           data: params,
-          /* headers: Object.assign({
-            'content-type': 'application/json'
-          }, header), */
+          headers: Object.assign({
+            // 'Authorization': 'Bearer ' + token.data
+            // 'content-type': 'application/json'
+          }, header),
           success: res => {
             const {
               data
@@ -38,7 +41,7 @@ export default {
             } else if (data.code === -100) {
                 my.alert({
                   title: '提示',
-                  content: '授权过期',
+                  content: '您暂未授权或授权已过期',
                   buttonText: '去授权',
                   success: () => {
                     my.navigateTo({
@@ -57,9 +60,9 @@ export default {
             }
           },
           fail: (err) => {
+            reject(err)
             // let _msg = err.data.msg ? err.data.msg : err.errMsg ? err.errMsg : err.error
             my.hideLoading()
-            console.log('请求超时')
             if (err.errMsg === 'request:fail timeout') {
               my.confirm({
                 title: '错误提示',
@@ -71,7 +74,8 @@ export default {
                 }
               })
             } else {
-              my.confirm({
+              console.log('请求失败')
+              /* my.confirm({
                 title: '错误提示',
                 content: '网络异常，请稍后重试',
                 confirmButtonText: '好的',
@@ -79,7 +83,7 @@ export default {
                   if (result.confirm) {
                   }
                 }
-              })
+              }) */
             }
           }
         })

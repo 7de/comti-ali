@@ -21,7 +21,7 @@ Page({
     currentMarkersLong: 0,
     currentMarkersLati: 0,
     currentMarkerName: '',
-    currentMarkerAddr: '',
+    currentMarkerAddr: ''
   },
   onLoad() {
     my.getSystemInfo({
@@ -158,7 +158,10 @@ Page({
       case 3: this.openPersonal()
     }
   },
+  // 分享事件
+  shareEvent() {
 
+  },
   // 是否授权获取位置
   getLocation() {
     var that = this;
@@ -195,7 +198,8 @@ Page({
     my.scan({
       success: (res) => {
         let _qr = decodeURIComponent(res.qrCode)
-        let _qrBox = _qr.split('num=')
+        let _qrBox = _qr.split('scan?num=')
+        console.log(_qrBox)
         let _code = _qrBox[1]
         if (_code) {
           my.navigateTo({
@@ -222,7 +226,7 @@ Page({
       }
     })
   },
-  // 个人中心--先授权获取个人信息
+  // 个人中心
   openPersonal() {
     my.navigateTo({
       url: '/page/personal/personal'

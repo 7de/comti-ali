@@ -1,7 +1,7 @@
 import api from '/common/api.js'
 import page from '/common/page.js'
 const app = getApp()
-const loginUrl = 'ali/aliLogin/'
+const loginUrl = 'ali/aliLogin/login'
 Page({
   data: {},
   onLoad() {
@@ -13,6 +13,7 @@ Page({
     my.getAuthCode({
       scopes: 'auth_user',
       success: (res) => {
+        console.log(res)
         const {authCode} = res
         my.hideLoading()
         // 获取用户信息
@@ -29,7 +30,7 @@ Page({
         my.showLoading({
           content: '授权中...'
         })
-        api.post(loginUrl+'login', {authCode: authCode}).then( ({data}) => {
+        api.post(loginUrl, {authCode: authCode}).then( ({data}) => {
           my.hideLoading()
           app.globalData.token = data.rd_session
           my.setStorageSync({

@@ -1,0 +1,14 @@
+.card-title{
+  height: 90rpx;
+  line-height: 90rpx;
+  padding: 0 30rpx;
+  background-color: #e5e5e5;
+}
+.card-content{
+  padding-bottom: 50rpx;
+  font-size:12px;
+  background-color: #fff;
+}
+.card-conten__title{
+  color: #FF7300
+}

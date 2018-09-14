@@ -90,6 +90,7 @@ Page({
     })
     // api.get(orderURL + 'queryOrderNoListMobile?orderStatus=' + state + '&rdSession=' + app.globalData.token + '&pageNum=' + pagenum + '&pageSize=' + that.data.pageSize).then(res => {
     api.get(orderURL + 'queryOrderNoListMobile', _params).then(res => {
+      console.log(res)
       if (pagenum === 1) {
         that.setData({
           allData: res,

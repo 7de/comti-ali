@@ -221,11 +221,9 @@ Page({
     console.log(e)
     const _this = this
     let _formId = e.detail.formId
-    console.log(_formId)
-    api.get(formUrl, {formId: _formId}).then(res => {
+    /* api.get(formUrl, {formId: _formId}).then(res => {
       console.log(res)
-    })
-    console.log(_formId)
+    }) */
     if (this.data.itemsDis) {
       this.checkEqui()
     } else if (this.data.checkedValue < 0){
@@ -239,12 +237,14 @@ Page({
         content: '请确认是否开始充电？',
         success: (result) => {
           if(result.confirm) {
-            let _params = Object.assign({
+            console.log(_formId)
+            let _params = {
+              // formId: _formId,
               chargerMode: parseInt(this.data.charger_mode),
               chargerValue: this.data.time_value,
               streamNo: this.data.code,
               totalFee: this.data.totalFee * 100
-            })
+            }
             my.showLoading({
               content: '开启充电...'
             })
@@ -257,12 +257,7 @@ Page({
               headers: Object.assign({
                 'content-type': 'application/json'
               }),
-              data: JSON.stringify({
-                chargerMode: parseInt(this.data.charger_mode),
-                chargerValue: this.data.time_value,
-                streamNo: this.data.code,
-                totalFee: this.data.totalFee * 100
-              }),
+              data: JSON.stringify(_params),
               dataType: 'json',
               success: (res) => {
                 my.hideLoading()

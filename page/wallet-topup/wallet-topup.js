@@ -116,7 +116,7 @@ Page({
       })
       my.confirm({
         title: '温馨提示',
-        content: '请确认是否充值' + _money + '元',
+        content: '确认是否充值' + _money + '元？',
         confirmButtonText: '马上充值',
         success: (result) => {
           const _this = this
@@ -143,7 +143,7 @@ Page({
                     } else if (parseInt(res.resultCode) === 6004) {
                       _msg = '支付结果未知,请查询商户订单列表中订单的支付状态'
                     } else {
-                      _msg = '充值失败，请稍后再试'
+                      _msg = '充值失败！'
                     }
                     my.alert({
                       title: '温馨提示',
@@ -158,11 +158,7 @@ Page({
                   }
                 },
                 fail: (res) => {
-                  my.alert({
-                    title: '错误提示',
-                    content: '充值失败，请稍后再试',
-                    buttonText: '我知道了'
-                  })
+                  console.log('充值失败')
                 }
               })
             })

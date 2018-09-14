@@ -2,6 +2,7 @@ import api from '/common/api.js'
 import page from '/common/page.js'
 const app = getApp()
 const URL = 'platform/platform/customer/getCustomerByKey'
+// const URL = 'platform/platform/customer/getCustomerByToken' // 用户信息
 Page({
   data: {
     user:{

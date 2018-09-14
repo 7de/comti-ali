@@ -4,7 +4,7 @@ const userUrl = 'platform/platform/customer/getCustomerByKey' // 用户信息
 const cardUrl = 'platform/platform/smartCard/findSmartCardByCode' // 卡信息
 const balanceUrl = 'wallet/customWallet/queryBalanceBySession' // 用户余额
 const bindUrl = 'platform/platform/smartCard/updateCtkSmartCard' // 绑定卡
-const payUrl = 'wxpay/wxpay/jsapi/pay' // 支付
+const payUrl = 'ali/Alipay/jsapi/pay'
 Page({
   data: {
     code: '',
@@ -30,14 +30,12 @@ Page({
       let _qr = decodeURIComponent(app.globalData.qrCode)
       console.log(_qr)
       // let _url = decodeURIComponent(option.q) // 字符分割
-      let _urlBox = _qr.split('card=')
-      console.log(_urlBox)
+      let _urlBox = _qr.split('scan?card=')
       this.setData({
         code: _urlBox[1]
       })
     }
     if (this.data.code) {
-      console.log(this.data.code)
       this.setData({
         newCode: api.fotmatCard(this.data.code)
       })
@@ -45,8 +43,8 @@ Page({
   },
   onShow() {
     if (app.globalData.token) {
-      console.log(app.globalData.token)
-      this.getBalance()
+      // this.getBalance()
+      this.getUser()
       this.getCard()
     } else {
       my.alert({
@@ -63,6 +61,7 @@ Page({
   },
   // input失去焦距
   bindblur(e) {
+    console.log(e.detail.value)
     let _value = parseFloat(e.detail.value)
     this.setData({
       money_input: _value
@@ -84,14 +83,12 @@ Page({
     })
     console.log('卡信息获取')
     const _this = this
-    api.get(cardUrl + '?code=' + this.data.code, {}, {
+    api.get(cardUrl, {
+      code: this.data.code
+    }, {
       'token': app.globalData.token
     }).then(res => {
-      my.hideLoading
-      console.log('获取成功')
-      console.log(res)
-      // status 0 未绑定 1 已绑定 2 已注销
-      // state null 未绑定 0 自己卡 1 别人卡
+      my.hideLoading()
       let _data = res.data
       if (_data) {
         _this.setData({
@@ -103,7 +100,6 @@ Page({
           invalidCard: false
         })
         _this.checkStatus(_data.status)
-        console.log('值' + _data)
       } else {
         my.alert({
           title: '温馨提示',
@@ -126,71 +122,126 @@ Page({
   topup() {
     let _money = this.data.money_input
     let _goodTitle = this.data.state === 1 ? '给他人' : ''
+    let _goodName = this.data.state === 1 ? '他人' : ''
     if (!_money) {
-      this.showTopTips('请输入充值金额')
+      my.showToast({
+        content: '请输入充值金额'
+      })
     } else if (_money < 0.01) {
-      this.showTopTips('请输入大于或等于0.01的金额')
-      this,setData({
+      my.showToast({
+        content: '请输入大于或等于0.01的金额'
+      })
+      this.setData({
         money_input: ''
       })
     } else {
       my.confirm({
         title: '温馨提示',
-        content: `请确认是否${_goodTitle}充值${_money}元？`,
+        content: `是否${_goodTitle}充值${_money}元？`,
         confirmButtonText: '马上充值',
         success: (result) => {
-          if (result.confirm) {
-            api.post(payUrl + '?rdSession=' + app.globalData.token + '&id=' + this.data.userId, {
-              goodsId: 1, // 商品ID
-              goodsName: '充值' + _money + '元', // 商品名称
-              totalfee: _money * 100  // 充值金额 转为以分为单位
-            }).then(res => {
-              
-            })
-
-          }
-        }
-      })
-      wepy.showModal({
-        title: '温馨提示',
-        content: `请确认是否${_goodTitle}充值${_money}元？`,
-        confirmText: '马上充值',
-        success: res => {
           const _this = this
-          if (res.confirm) {
-            api.post(payUrl + '?rdSession=' + _this.$parent.token + '&id=' + this.userId, {
-              goodsId: 1, // 商品ID
-              goodsName: '充值' + _money + '元', // 商品名称
-              totalfee: _money * 100  // 充值金额 转为以分为单位
-            }).then(res => {
-              console.log(res)
-              let _data = res.data
-              // 调用支付接口
-              wepy.requestPayment({
-                'timeStamp': _data.timeStamp,
-                'nonceStr': _data.nonceStr,
-                'package': _data.package,
-                'signType': 'MD5',
-                'paySign': _data.paySign,
-                'success': res => {
-                  _this.getBalance()
-                  _this.money_input = ''
-                  this.$apply()
-                  wepy.showToast({
-                    title: '充值成功',
-                    icon: 'success',
-                    duration: 2000
-                  })
+          let _params = Object.assign({
+            rdSession: app.globalData.token,
+            id: this.data.userId,
+            subject: `${_goodName}充值${_money}元`,
+            totalFee: _money * 100
+          })
+          if (result.confirm) {
+            api.post(payUrl, _params).then(({data}) => {
+              console.log(data)
+              const _data = data
+              my.tradePay({
+                orderStr: _data, //完整的支付参数拼接成的字符串，从服务端获取
+                success: (res) => {
+                  if (parseInt(res.resultCode) === 9000){
+                    _this.setData({
+                      money_input: ''
+                    })
+                    _this.getBalance()
+                  } else {
+                    let _msg = '' 
+                    if (parseInt(res.resultCode) === 8000) {
+                      _msg = '正在处理中'
+                    } else if (parseInt(res.resultCode) === 6004) {
+                      _msg = '支付结果未知,请查询商户订单列表中订单的支付状态'
+                    } else {
+                      _msg = '充值失败!'
+                    }
+                    my.alert({
+                      title: '温馨提示',
+                      content: _msg,
+                      buttonText: '我知道了',
+                      success: () => {
+                      }
+                    })
+                  }
                 },
-                'fail': err => {
-                  _this.showTopTips('充值失败，请稍后再试')
-                  console.log(err.errMsg)
+                fail: (res) => {
+                  console.log('充值失败')
                 }
               })
             })
           }
+        },
+        fail: (err) => {
+          console.log('充值失败')
         }
       })
     }
+  },
+  // 绑定
+  bindingBtn() {
+    const _this = this
+    my.confirm({
+      title: '温馨提示',
+      content: `绑定${_this.data.code}智能卡？`,
+      success: (result) => {
+        if (result.confirm) {
+          let  _params = {
+            code: this.data.code,
+            nickName: this.data.userNickname,
+            source: 2, // 1,微信客户 2,支付宝客户
+            token: app.globalData.token
+          }
+          api.post(bindUrl, JSON.stringify(_params), {
+            'content-type': 'application/json'
+          }).then(res => {
+            console.log(res)
+            this.getCard()
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      }
+    })
+  },
+  // 状态处理
+  checkStatus(status) {
+    const that = this
+    if (status === 0) {
+      my.confirm({
+        title: '温馨提示',
+        content: `该卡暂未绑定用户，是否绑定？`,
+        confirmButtonText: '马上绑定',
+        success: (result) => {
+          if (result.confirm) {
+            that.bindingBtn()
+          }
+        }
+      })
+    } else if (status === 1) {
+      this.getBalance()
+    }
+  },
+  // 获取用户昵称
+  getUser() {
+    api.get(userUrl, {
+      rdSession: app.globalData.token
+    }).then(res => {
+      this.setData({
+        userNickname: res.data.nickName
+      })
+    })
   }
 });

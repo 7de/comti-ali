@@ -28,7 +28,7 @@
             <view class="scan-subtitle zan-pull-left">
               <view class="iconfont zan-font-26">￥</view>
             </view>
-            <input class="zan-pull-left oth-input" type="digit" value="{{money_input}}" name="moneyinp" placeholder="请输入充值金额" bindblur="bindblur"/>
+            <input class="zan-pull-left oth-input" type="digit" value="{{money_input}}" name="moneyinp" placeholder="请输入充值金额" onBlur="bindblur"/>
           </view>
         </view>
         <view class="zan-hairline--top" style="margin:0 30rpx"></view>

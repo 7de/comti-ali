@@ -1,3 +1,6 @@
-<view>
-  New Page
+<import src="/page/component/com-carddetail/com-carddetail.axml"/>
+<view class="card-container">
+  <view class="page_spacing" style="padding-top:40rpx;">
+    <template is="comcarddetail" data="{{...cardData, creatTime, bindTime}}"/>
+  </view>
 </view>
