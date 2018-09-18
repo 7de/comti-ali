@@ -1,8 +1,8 @@
 import api from '/common/api.js'
 import page from '/common/page.js'
 const app = getApp()
-const URL = 'platform/platform/customer/getCustomerByKey'
-// const URL = 'platform/platform/customer/getCustomerByToken' // 用户信息
+// const URL = 'platform/platform/customer/getCustomerByKey'
+const URL = 'platform/platform/customer/getCustomerByToken' // 用户信息
 Page({
   data: {
     user:{
@@ -19,7 +19,7 @@ Page({
           path:'../wallet-detail/wallet-detail'
         },
         {
-          iconfont: 'trade',
+          iconfont: 'wallet-c',
           arrow: 'horizontal',
           title: '账户余额',
           path: '../wallet/wallet'
@@ -31,7 +31,7 @@ Page({
           path: '../card/card'
         },
         {
-          iconfont: 'manageorder',
+          iconfont: 'uutmoney',
           arrow: 'horizontal',
           title: '充值记录',
           path: '../wallet-topup-record/wallet-topup-record'

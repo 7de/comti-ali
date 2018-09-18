@@ -221,9 +221,6 @@ Page({
     console.log(e)
     const _this = this
     let _formId = e.detail.formId
-    /* api.get(formUrl, {formId: _formId}).then(res => {
-      console.log(res)
-    }) */
     if (this.data.itemsDis) {
       this.checkEqui()
     } else if (this.data.checkedValue < 0){
@@ -239,7 +236,7 @@ Page({
           if(result.confirm) {
             console.log(_formId)
             let _params = {
-              // formId: _formId,
+              formId: _formId,
               chargerMode: parseInt(this.data.charger_mode),
               chargerValue: this.data.time_value,
               streamNo: this.data.code,
@@ -277,9 +274,9 @@ Page({
                     content: '授权过期',
                     buttonText: '去授权',
                     success: () => {
-                        my.navigateTo({
-                            url: '../authorize/authorize'
-                        })
+                      my.navigateTo({
+                          url: '../authorize/authorize'
+                      })
                     }
                   })
                 } else if (data.code === 0) {

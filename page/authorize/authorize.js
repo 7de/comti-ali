@@ -27,15 +27,18 @@ Page({
         let _params = Object.assign({
           authCode: authCode
         })
+        console.log(authCode)
         my.showLoading({
           content: '授权中...'
         })
         api.post(loginUrl, {authCode: authCode}).then( ({data}) => {
+          console.log(data)
           my.hideLoading()
-          app.globalData.token = data.rd_session
+          app.globalData.token = data.access_token
           my.setStorageSync({
-            key: 'token',
-            data: data.rd_session
+            key: 'token_n',
+            // data: data.rd_session
+            data: data.access_token
           })
           console.log(getCurrentPages().length)
           if(getCurrentPages().length>1){
@@ -43,6 +46,8 @@ Page({
           } else {
             page.goHome()
           }
+        }).catch( err => {
+          console.log(err)
         })
       }
     })

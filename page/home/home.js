@@ -50,7 +50,7 @@ Page({
   getMarkers() {
     let that = this
     api.get(markerUrl+'queryMapSiteList').then(res => {
-      // console.log(res)
+      console.log(res)
       my.hideLoading()
       that.setData({
         markers: res.data

@@ -10,7 +10,7 @@
           <text class="zan-font-22">{{item.code ? item.code : ' '}}</text>
         </view>
         <view class="card-item bg">
-          <image style="width: 160rpx; height:90rpx;display:block" src="../../../images/code_bg.png" />
+          <image style="width: 160rpx; height:95rpx;display:block" src="../../../images/code_bg.png" />
         </view>
       </view>
     </block>
