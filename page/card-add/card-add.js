@@ -1,6 +1,6 @@
 import api from '/common/api.js';
 const app = getApp()
-const userUrl = 'platform/platform/customer/getCustomerByKey' // 用户信息
+const userUrl = 'platform/platform/customer/getCustomerByToken' // 用户信息
 const cardUrl = 'platform/platform/smartCard/findSmartCardByCode' // 卡信息
 const balanceUrl = 'wallet/customWallet/queryBalanceBySession' // 用户余额
 const bindUrl = 'platform/platform/smartCard/updateCtkSmartCard' // 绑定卡
@@ -42,22 +42,7 @@ Page({
     }
   },
   onShow() {
-    if (app.globalData.token) {
-      // this.getBalance()
-      this.getUser()
-      this.getCard()
-    } else {
-      my.alert({
-        title: '提示',
-        content: '您暂未授权或授权已过期',
-        buttonText: '去授权',
-        success: () => {
-          my.navigateTo({
-            url: '/page/authorize/authorize'
-          })
-        }
-      })
-    }
+    this.getCard()
   },
   // input失去焦距
   bindblur(e) {
@@ -69,11 +54,21 @@ Page({
   },
   // 账户余额查询
   getBalance() {
-    api.get(balanceUrl + '?rdSession=' + app.globalData.token).then(res => {
+    api.get(balanceUrl, {}, {}, app.globalData.token).then(res => {
       console.log(res.code)
       this.setData({
         account: parseFloat(api.fotmatMoney(res.data))
       })
+    }).catch( err => {
+      console.log(err)
+      my.hideLoading()
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   // 获取卡号信息
@@ -86,8 +81,7 @@ Page({
     api.get(cardUrl, {
       code: this.data.code
     }, {
-      'token': app.globalData.token
-    }).then(res => {
+    }, app.globalData.token).then(res => {
       my.hideLoading()
       let _data = res.data
       if (_data) {
@@ -112,10 +106,16 @@ Page({
           }
         })
       }
-    }).catch(err => {
-      my.hideLoading
-      console.log('获取失败')
+    }).catch( err => {
       console.log(err)
+      my.hideLoading()
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   // 充值
@@ -148,7 +148,7 @@ Page({
             totalFee: _money * 100
           })
           if (result.confirm) {
-            api.post(payUrl, _params).then(({data}) => {
+            api.post(payUrl, _params, {}, app.globalData.token).then(({data}) => {
               console.log(data)
               const _data = data
               my.tradePay({
@@ -181,6 +181,16 @@ Page({
                   console.log('充值失败')
                 }
               })
+            }).catch( err => {
+              console.log(err)
+              my.hideLoading()
+              if (err.code === -1) {
+                my.showToast({
+                  content: err.msg,
+                  type: 'none',
+                  duration: 2000
+                })
+              }
             })
           }
         },
@@ -206,11 +216,18 @@ Page({
           }
           api.post(bindUrl, JSON.stringify(_params), {
             'content-type': 'application/json'
-          }).then(res => {
+          }, app.globalData.token).then(res => {
             console.log(res)
             this.getCard()
-          }).catch(err => {
+          }).catch( err => {
             console.log(err)
+            if (err.code === -1) {
+              my.showToast({
+                content: err.msg,
+                type: 'none',
+                duration: 2000
+              })
+            }
           })
         }
       }
@@ -220,6 +237,7 @@ Page({
   checkStatus(status) {
     const that = this
     if (status === 0) {
+      this.getUser()
       my.confirm({
         title: '温馨提示',
         content: `该卡暂未绑定用户，是否绑定？`,
@@ -236,12 +254,19 @@ Page({
   },
   // 获取用户昵称
   getUser() {
-    api.get(userUrl, {
-      rdSession: app.globalData.token
-    }).then(res => {
+    api.get(userUrl, {}, {}, app.globalData.token).then(res => {
       this.setData({
         userNickname: res.data.nickName
       })
+    }).catch( err => {
+      console.log(err)
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   }
 });

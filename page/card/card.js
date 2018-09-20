@@ -1,9 +1,12 @@
 import api from '/common/api.js';
 const app = getApp()
 const cardUrl = 'platform/platform/smartCard/findCtkSmartCardList' // 卡列表
+const delUrl = 'platform/platform/smartCard/updateUntieCard'
 Page({
   data: {
     allData: [],
+    currentIndex: null,
+    startX: null,
     height: '',
     pageNum: 1, // 当前页
     pageSize: 6, // 当前页数量
@@ -39,7 +42,67 @@ Page({
       this.getCard(this.data.pageNum)
     }
   },
-  addCard () {
+  touchS(e) {
+    console.log(e)
+    if(e.touches.length==1){
+      this.setData({
+        startX:e.touches[0].clientX
+      })
+    }
+  },
+  touchM(e) {
+    let _index = e.target.dataset.index
+    if(e.touches.length==1){
+      var moveX = e.touches[0].clientX
+      var disX = this.data.startX - moveX;
+      if(disX == 0 || disX < 0){
+        this.setData({
+          currentIndex: null
+        })
+      }else if(disX > 0 ){
+        this.setData({
+          currentIndex: _index
+        })
+      }
+    }
+  },
+  touchE(e) {
+    console.log('移动结束')
+  },
+  // 解绑卡
+  delEvent(e){
+    let _code = e.target.dataset.code
+    my.confirm({
+        title: '温馨提示',
+        content: '是否删除此卡？',
+        success: (result) => {
+          if (result.confirm) {
+            api.post(delUrl + '?code=' + _code, {}, {}, app.globalData.token).then(res => {
+              console.log(res)
+              this.setData({
+                currentIndex: null
+              })
+              this.getCard(this.data.pageNum)
+            }).catch(err => {
+              console.log(err)
+              if (err.code === -1) {
+                my.showToast({
+                  content: data.msg,
+                  type: 'none',
+                  duration: 2000
+                })
+              }
+            })
+          } else {
+            this.setData({
+              currentIndex: null
+            })
+          }
+        }
+    })
+    console.log(e)
+  },
+  addCard() {
     my.scan({
       type: 'qr',
       success: (res) => {
@@ -67,10 +130,9 @@ Page({
     const _this = this
     api.get(cardUrl, {
       start: pageNum,
-      size: this.data.pageSize
-    }, {
-      'token': app.globalData.token
-    }).then(res => {
+      size: this.data.pageSize,
+      sortStr: 'created_time'
+    }, {}, app.globalData.token).then(res => {
       my.hideLoading()
       const _data = res.data
       if (pageNum === 1) {
@@ -83,15 +145,23 @@ Page({
           'allData.list': _this.data.allData.list.concat(_data.list)
         })
       }
-    }).catch(err => {
+    }).catch( err => {
       console.log(err)
       my.hideLoading()
-      console.log('请求错误')
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   // 进入详情
   gotoDetail(e) {
-    console.log(e)
+    this.setData({
+      currentIndex: null
+    })
     let _code = e.target.dataset.code
     my.navigateTo({
       url: `/page/card-detail/card-detail?code=${_code}`

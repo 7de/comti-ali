@@ -1,3 +1,4 @@
+<import src="/page/component/com-tab/com-tab.axml"/>
 <import src="/page/component/loading-page/loading-page.axml"/>
 <view class="container scan-box">
     <block a:if="{{showLoading}}">
@@ -5,46 +6,51 @@
     </block>
     <block a:else>
         <view class="zan-panel">
-          <view class="zan-cell">
+          <view class="zan-cell" style="padding-bottom:5px;">
             <view class="zan-cell__bd zan-clearfix">
               <view class="scan-subtitle zan-pull-left">
-                <view class="iconfont icon-qrcode zan-font-30" style="color:#7fb80e;"></view>
+                <view class="iconfont icon-qr zan-font-30" style="color:#7fb80e;"></view>
               </view>
-              <view class="scan-subtitle-con zan-pull-left"><input type="number" maxlength="12" class="zan-field__input" style="height:34px;font-size:18px;" onBlur="keyBlur" value="{{code}}" focus="{{input_focus}}" name="input"  placeholder="请输入充电插座ID"/></view>
+              <text class="zan-pull-left" style="line-height: 28px;">设备ID:</text>
+              <view class="scan-subtitle-con zan-pull-left" style="width:70%">
+                <input type="number" maxlength="12" class="zan-field__input" style="height:28px;font-size:18px;" onBlur="keyBlur" value="{{code}}" focus="{{input_focus}}" name="input"  placeholder="请输入充电插座ID"/>
+              </view>
             </view>
           </view>
         </view>
-        <view class="zan-panel-title">请选择充电时长：</view>
         <view class="zan-panel">
+          <template is="comtab" data="{{...tab}}"/>
           <radio-group class="zan-select__list" onChange="radioChange">
-            <label a:for="{{items}}" class="com-select-label com-select {{item.value === checkedValue?'com-select_active':''}}">
-              <radio class="zan-select__radio" value="{{item.value}}" checked="{{ item.value === checkedValue }}" disabled="{{itemsDis}}"/>
+            <label a:for="{{items}}" class="com-select-label com-select {{item.value === checkedValue?'com-select_active':''}} {{equiDisabled ? 'com-select_disabled' : ''}}">
+              <radio class="zan-select__radio" value="{{item.value}}" checked="{{ item.value === checkedValue }}" disabled="{{equiDisabled}}"/>
               <view class="com-select__bd">
                 {{ item.name }}
               </view>
             </label>
           </radio-group>
         </view>
-        <view class="zan-panel-title">预估金额：<text class="zan-font-12">(电费{{changeFee}}+服务费{{serviceFee}})</text></view>
+        <view class="zan-panel-title com-title">预估金额：<text class="zan-font-12">(电费{{changeFee}}+服务费{{serviceFee}})</text></view>
         <view class="zan-panel">
           <view class="zan-cell">
             <view class="zan-cell__bd zan-clearfix">
               <view class="scan-subtitle zan-pull-left">
-                <view class="iconfont icon-uutmoney zan-font-30" style="color:#7fb80e;"></view>
+                <view class="iconfont icon-uutmoney zan-font-24" style="color:#7fb80e;"></view>
               </view>
-              <text class="zan-pull-left zan-font-24 zan-c-red scan-subtitle-txt">￥{{totalFee}}</text>
+              <text class="zan-pull-left zan-font-18 zan-c-blue-dark scan-subtitle-txt">￥{{totalFee}}</text>
             </view>
           </view>
         </view>
-        <view class="zan-panel-title">账户金额：</view>
+        <view class="zan-panel-title com-title">账户金额：</view>
         <view class="zan-panel">
           <view class="zan-cell">
             <view class="zan-cell__bd" style="overflow:hidden">
-              <text class="zan-pull-left zan-c-red scan-subtitle-txt zan-ellipsis {{typeof account !== 'number'?'zan-font-22':'zan-font-26'}}" style="width:90%;">￥{{account}}</text>  
+              <view class="scan-subtitle zan-pull-left">
+                <view class="iconfont icon-wallet-c zan-font-30" style="color:#7fb80e;"></view>
+              </view>
+              <text class="zan-pull-left zan-c-blue-dark scan-subtitle-txt zan-ellipsis zan-font-18">￥{{account}}</text>  
             </view>
             <view class="zan-cell__ft scan-btn">
               <button type="button" style="overflow:hidden;font-size:12px;" class="{{showTopup?'zan-btn--disabled':''}}" disabled="{{showTopup}}" onTap="goTopup">
-                <view class="iconfont icon-signboard zan-font-18 zan-pull-left"></view>
                 <text class="zan-pull-left">余额充值</text>
               </button>
             </view>
@@ -52,7 +58,7 @@
         </view>
         <view class="zan-panel" style="margin:30rpx 40rpx">
           <form report-submit="true" onSubmit="formSubmit">
-            <button class="zan-btn zan-btn--primary {{submitDisabled?'zan-btn--disabled':''}}" disabled="{{submitDisabled}}" formType="submit">确认并提交</button>
+            <button class="zan-btn zan-btn--primary {{submitDisabled ?'zan-btn--disabled':''}}" disabled="{{submitDisabled}}" formType="submit">确认并提交</button>
           </form>
         </view>
     </block>

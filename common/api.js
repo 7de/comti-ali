@@ -5,20 +5,35 @@ export default {
       // host: 'https://www.comtti.net/',
       // 测试
       host: 'https://actor.comtti.net/pc/',
-      token: my.getStorageSync({key: 'token'})
+      token: my.getStorageSync({key: 'token_n'})
     },
-    _request(method, url, params, header = {}) {
+    _request(method, url, params, header = {}, Utoken) {
       const {
         host,
         token
       } = this.apiData
       return new Promise((resolve, reject) => {
-        my.httpRequest({
+        let _token = token.data
+        let userToken = _token ? _token : Utoken
+        if (!userToken) {
+          console.log('没有授权')
+          my.alert({
+            title: '提示',
+            content: '您暂未授权或授权已过期',
+            buttonText: '去授权',
+            success: () => {
+              my.navigateTo({
+                  url: '../authorize/authorize'
+              })
+            }
+          })
+        } else {
+          my.httpRequest({
           url: `${host}${url}`,
           method: method,
           data: params,
           headers: Object.assign({
-            // 'Authorization': 'Bearer ' + token.data
+            'Authorization': 'Bearer ' + userToken
             // 'content-type': 'application/json'
           }, header),
           success: res => {
@@ -33,11 +48,12 @@ export default {
                 duration: 2000
               })
             } else if (data.code === -1) {
-              my.showToast({
+              /* my.showToast({
                 content: data.msg,
                 type: 'none',
                 duration: 2000
-              })
+              }) */
+              reject(data)
             } else if (data.code === -100) {
                 my.alert({
                   title: '提示',
@@ -60,7 +76,6 @@ export default {
             }
           },
           fail: (err) => {
-            reject(err)
             // let _msg = err.data.msg ? err.data.msg : err.errMsg ? err.errMsg : err.error
             my.hideLoading()
             if (err.errMsg === 'request:fail timeout') {
@@ -74,6 +89,7 @@ export default {
                 }
               })
             } else {
+              reject(err)
               console.log('请求失败')
               /* my.confirm({
                 title: '错误提示',
@@ -87,13 +103,16 @@ export default {
             }
           }
         })
+
+        }
+        
       })
     },
-    get(url, params = {}, header = {}) {
-      return this._request('GET', url, params, header)
+    get(url, params = {}, header = {}, Utoken) {
+      return this._request('GET', url, params, header, Utoken)
     },
-    post(url, params = {}, header = {}) {
-      return this._request('POST', url, params, header)
+    post(url, params = {}, header = {}, Utoken) {
+      return this._request('POST', url, params, header, Utoken)
     },
     put(url, params = {}, header = {}) {
       return this._request('PUT', url, params, header)

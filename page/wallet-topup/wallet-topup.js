@@ -110,7 +110,6 @@ Page({
     } else {
       let _money = e.detail.value.moneyinp ? e.detail.value.moneyinp : e.detail.value.lib
       let _params = Object.assign({
-        rdSession: app.globalData.token,
         subject: '充值' + _money + '元',
         totalFee: _money * 100
       })
@@ -124,7 +123,7 @@ Page({
             my.showLoading({
               content: '充值中...'
             })
-            api.post(payUrl + 'pay', _params).then( ({data}) => {
+            api.post(payUrl + 'pay', _params, {}, app.globalData.token).then( ({data}) => {
               my.hideLoading()
               const _data = data
               my.tradePay({
@@ -161,6 +160,16 @@ Page({
                   console.log('充值失败')
                 }
               })
+            }).catch( err => {
+              my.hideLoading()
+              console.log(err)
+              if (err.code === -1) {
+                my.showToast({
+                  content: err.msg,
+                  type: 'none',
+                  duration: 2000
+                })
+              }
             })
           }
         },

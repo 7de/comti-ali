@@ -30,7 +30,7 @@ Page({
     console.log(this.data.code)
     api.get(cardUrl, {
       code: this.data.code
-    }).then(res => {
+    }, {}, app.globalData.token).then(res => {
       console.log(res)
       my.hideLoading()
       let _data = res.data.list[0]
@@ -39,9 +39,16 @@ Page({
         creatTime: this.formatDate(_data.batchTime),
         bindTime: this.formatDate(_data.bindingTime)
       })
-    }).catch(err => {
-      wepy.hideLoading()
+    }).catch( err => {
       console.log(err)
+      my.hideLoading()
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   // 时间戳转换

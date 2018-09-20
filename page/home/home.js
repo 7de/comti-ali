@@ -1,7 +1,6 @@
 import api from '/common/api.js';
 const app = getApp()
 const markerUrl = 'sites/sites/' // 站点
-const equiUrl = 'equip/equipSocket/querySocketStatus' // 设备
 const orderURL = 'server/'
 Page({
   // ...fullmap,
@@ -21,7 +20,8 @@ Page({
     currentMarkersLong: 0,
     currentMarkersLati: 0,
     currentMarkerName: '',
-    currentMarkerAddr: ''
+    currentMarkerAddr: '',
+    token: ''
   },
   onLoad() {
     my.getSystemInfo({
@@ -31,16 +31,20 @@ Page({
         })
       }
     })
-    this.showCharging()
   },
   onReady(e) {
     // 使用 my.createMapContext 获取 map 上下文
     this.mapCtx = my.createMapContext('map')
-    this.getLocation()
+    this.movetoPosition()
     this.mapControl()
-    this.getMarkers()
+    this.getLocation()
   },
   onShow(){
+    let _token = my.getStorageSync({ key: 'token_n' })
+    this.setData({
+      token: app.globalData.token ? app.globalData.token : _token.data
+    })
+    this.getMarkers()
   },
   // 定位到本地坐标
   movetoPosition() {
@@ -49,12 +53,21 @@ Page({
   // 地图标记
   getMarkers() {
     let that = this
-    api.get(markerUrl+'queryMapSiteList').then(res => {
-      console.log(res)
+    api.get(markerUrl+'queryMapSiteList', {}, {}, this.data.token).then(res => {
       my.hideLoading()
       that.setData({
         markers: res.data
       })
+      this.showCharging()
+    }).catch( err => {
+      console.log(err)
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   // 标记点击事件
@@ -98,7 +111,6 @@ Page({
   mapControl() {
     my.getSystemInfo({
       success: res => {
-        console.log(res)
         // 兼容图标显示不一致bug
         let _pix = res.pixelRatio
         let judgeMapIcon = (_pix>2)&&(res.platform==='iOS'||res.brand==='iPhone')
@@ -243,13 +255,12 @@ Page({
     let _params = Object.assign({
       orderStatus: 0,
       pageNum: 1,
-      pageSize: 10,
-      rdSession: app.globalData.token
+      pageSize: 10
     })
     my.showLoading({
       content: '订单查询中...'
     })
-    api.get(orderURL + 'queryOrderNoListMobile', _params).then(({data}) => {
+    api.get(orderURL + 'queryOrderNoListMobile', _params, {}, this.data.token).then(({data}) => {
       my.hideLoading()
       let _len = data.length
       if (_len) {
@@ -264,6 +275,16 @@ Page({
               })
             }
           }
+        })
+      }
+    }).catch( err => {
+      console.log(err)
+      my.hideLoading()
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
         })
       }
     })

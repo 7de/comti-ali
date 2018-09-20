@@ -1,13 +1,19 @@
+.card-list{
+  position: relative;
+  margin-top: 30rpx;
+  transition: all 3s;
+}
 .card-box{
   color:#fff;
   border-radius: 4px;
-  margin-top: 30rpx;
   padding-top:30rpx;
-  padding-left: 30rpx;
   position: relative;
+  float: left;
+  width: 100%;
 }
 .card-box .logo{
     margin-right: 25rpx;
+    padding-left: 30rpx;
 }
 .card-box .text{
     padding-bottom: 30rpx;
@@ -19,6 +25,22 @@
     position: absolute;
     bottom:0;
     right:0
+}
+.dele-box{
+  display: none;
+  width: 90rpx;
+  float: left;
+  text-align: center;
+}
+.del{
+  height:163rpx;
+  margin-right:10rpx;
+  justify-content: flex-end;
+  align-items:center;
+}
+.dele-box .icon-shanchu{
+  font-size: 24px;
+  color:#657270;
 }
 .card-box--green{
   background-color: #df7879;

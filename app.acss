@@ -114,6 +114,11 @@ page {
   font-size: 12px;
   color:#999;
 }
+.com-select_disabled{
+  border-color:#DCDCDC;
+  background-color: #DCDCDC;
+  color: #fff
+}
 .com-select__bd{
   position: absolute;
   top:15rpx;

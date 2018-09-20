@@ -46,7 +46,7 @@ Page({
       sortStr: 'update_time',
       sortType: 'desc'
     })
-    api.get(recordURL + 'queryBalanceSub', _params).then(({data}) => {
+    api.get(recordURL + 'queryBalanceSub', _params, {}, app.globalData.token).then(({data}) => {
       console.log(data)
       if (this.data.pageNum === 1) {
         this.setData({
@@ -61,6 +61,18 @@ Page({
       this.setData({
         loadingShow: false
       })
+    }).catch( err => {
+      this.setData({
+        loadingShow: false
+      })
+      console.log(err)
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   }
 });

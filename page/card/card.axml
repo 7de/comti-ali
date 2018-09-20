@@ -1,7 +1,7 @@
 <import src="/page/component/com-card/com-card.axml"/>
 <view class="card-container">
   <view class="page_spacing card__cont">
-    <template is="comcard" data="{{...allData}}"/>
+    <template is="comcard" data="{{...allData,currentIndex:currentIndex}}"/>
   </view>
   <view class="card-add" onTap="addCard">添加卡号</view>
 </view>

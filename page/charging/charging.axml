@@ -15,10 +15,10 @@
         <view class="zan-cell__bd"><view class="charging_title">设备编码</view><text class="">{{chargData.socketSeq}}</text></view>
       </view>
       <view class="zan-cell">
-        <view class="zan-cell__bd"><view class="charging_title">充电时长</view><text class="time-padding">{{hours}}</text>:<text class="time-padding">{{minuters}}</text>:<text class="time-padding">{{seconds}}</text></view>
+        <view class="zan-cell__bd"><view class="charging_title">充电时长</view><text class="time-padding" style="padding-left:0">{{hours}}</text>:<text class="time-padding">{{minuters}}</text>:<text class="time-padding">{{seconds}}</text></view>
       </view>
       <view class="zan-cell">
-        <view class="zan-cell__bd"><view class="charging_title">预计结束时间</view><text class="">{{charg_endtime}}</text></view>
+        <view class="zan-cell__bd"><view class="charging_title">预计结束时间</view><text class="" style="padding-left:4px;">{{charg_endtime}}</text></view>
       </view>
       <view class="zan-cell">
         <view class="zan-cell__bd"><view class="charging_title">预估金额</view><text class="zan-font-16 zan-c-red">￥{{money}}</text></view>

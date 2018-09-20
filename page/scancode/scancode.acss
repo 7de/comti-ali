@@ -1,16 +1,20 @@
 @import "/page/component/loading-page/loading-page.acss";
+@import "/page/component/com-tab/com-tab.acss";
 .scan-box>.zan-panel{
     margin-top: 30rpx;
 }
 .scan-box>.zan-panel-title{
     padding-top: 35rpx;
+    padding-left:40rpx;
+    font-size:14px;
 }
 .scan-box .scan-input{
     font-size: 40rpx;
 }
 .scan-subtitle{
     width: 14%;
-    height:42px;
+    height:28px;
+    line-height:28px;
     text-align: center;
 }
 .scan-subtitle-con{
@@ -18,20 +22,17 @@
     overflow: hidden;
 }
 .scan-subtitle-txt{
-    line-height: 42px;
+    line-height: 28px;
 }
 .scan-btn button{
-    height: 38px;
-    line-height: 38px;
+    height: 28px;
+    line-height: 28px;
     font-size: 14px;
     color: #fff;
-    padding:0 10rpx;
+    padding:0 18rpx;
     background-color: #f47a55;
     border:1px solid #fff;
     border-radius: 5px;
-}
-.scan-btn button>text{
-    margin-left: 5px;
 }
 .scan-btn button.zan-btn--disabled{
     background-color: #f8f8f8;

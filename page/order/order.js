@@ -89,7 +89,7 @@ Page({
       rdSession: app.globalData.token
     })
     // api.get(orderURL + 'queryOrderNoListMobile?orderStatus=' + state + '&rdSession=' + app.globalData.token + '&pageNum=' + pagenum + '&pageSize=' + that.data.pageSize).then(res => {
-    api.get(orderURL + 'queryOrderNoListMobile', _params).then(res => {
+    api.get(orderURL + 'queryOrderNoListMobile', _params, {}, app.globalData.token).then(res => {
       console.log(res)
       if (pagenum === 1) {
         that.setData({
@@ -111,6 +111,15 @@ Page({
           loadingsubShow: false
         })
       }, 500)
+    }).catch( err => {
+      console.log(err)
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   }
 });

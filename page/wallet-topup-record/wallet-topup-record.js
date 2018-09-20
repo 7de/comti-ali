@@ -40,12 +40,11 @@ Page({
   // 充值记录查询
   getData() {
     let _params = Object.assign({
-      rdSession: app.globalData.token,
       start: this.data.pageNum,
       size: this.data.pageSize
     })
     console.log('充值记录' + app.globalData.token)
-    api.get(recordURL + 'queryRechargeRecords', _params).then(({data}) => {
+    api.get(recordURL + 'queryRechargeRecords', _params, {}, app.globalData.token).then(({data}) => {
       if (this.data.pageNum === 1) {
         this.setData({
           recordList: data.list,
@@ -59,6 +58,18 @@ Page({
       this.setData({
         loadingShow: false
       })
+    }).catch( err => {
+      this.setData({
+        loadingShow: false
+      })
+      console.log(err)
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   }
 });

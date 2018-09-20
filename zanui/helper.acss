@@ -122,6 +122,9 @@
   display: table;
   clear: both;
 }
+.zan-c-blue-dark {
+  color: #344047
+}
 .zan-c-red{color:#f44}.zan-c-black{color:#000}.zan-c-green{color:#06bf04}.zan-c-blue{color:#38f}.zan-c-gray{color:#c9c9c9}.zan-c-gray-dark{color:#999}.zan-c-gray-darker{color:#666}
 .zan-hairline,.zan-hairline--bottom,.zan-hairline--left,.zan-hairline--right,.zan-hairline--surround,.zan-hairline--top,.zan-hairline--top-bottom {
   position:relative

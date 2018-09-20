@@ -82,10 +82,20 @@ Page({
           my.showLoading({
             content: '正在关闭中...'
           })
-          api.get(orderURL + 'chargeEnd/' + this.data.order_no).then(res => {
+          api.get(orderURL + 'chargeEnd/' + this.data.order_no, {}, {}, app.globalData.token).then(res => {
             my.hideLoading()
             if (res.code === 0) {
               page.goHome()
+            }
+          }).catch( err => {
+            console.log(err)
+            my.hideLoading()
+            if (err.code === -1) {
+              my.showToast({
+                content: err.msg,
+                type: 'none',
+                duration: 2000
+              })
             }
           })
         }
@@ -102,6 +112,9 @@ Page({
     my.httpRequest({
       url: api.apiData.host + orderURL + 'queryOrderBrief/' + this.data.order_no,
       method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + app.globalData.token
+      },
       success: ({data}) => {
         this.setData({
           showLoading: false
@@ -115,8 +128,8 @@ Page({
           this.setData({
             chargData: _data,
             money: api.fotmatMoney(_data.predictFee),
-            charg_endtime: this.formatDate(_data.entTime),
-            charg_longtime: _progresstime.toFixed(2),
+            charg_endtime: _data.entTime ? this.formatDate(_data.entTime) : ' - -',
+            charg_longtime: _data.actRatio,
             hours: timeCount[0],
             minuters: timeCount[1],
             seconds: timeCount[2]

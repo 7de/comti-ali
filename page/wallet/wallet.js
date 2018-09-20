@@ -12,7 +12,7 @@ Page({
   },
   onShow() {
     // 账户余额查询
-    api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
+    api.get(URL, {}, {}, app.globalData.token).then(res => {
       console.log(res)
       my.hideLoading()
       this.setData({
@@ -20,6 +20,15 @@ Page({
         showTopup: false,
         account: parseFloat(api.fotmatMoney(res.data))
       })
+    }).catch( err => {
+      my.hideLoading()
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
     })
   },
   // 跳转在线充值

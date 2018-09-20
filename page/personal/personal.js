@@ -76,33 +76,32 @@ Page({
   onLoad() {
   },
   onShow() {
-    console.log(app.globalData.token)
-    if (app.globalData.token) {
-      api.get(URL, {
-        rdSession: app.globalData.token
-      }).then(res => {
-        if (res.code === 0) {
-          this.setData({
-            showLoading: false,
-            user:{
-              name: res.data.nickName ? res.data.nickName : '未知用户',
-              img: res.data.avatarUrl ? res.data.avatarUrl : '/images/user_2.png',
-              city: res.data.city ?  res.data.city : '未知'
-            }
-          })
-        }
-      })
-    } else {
-      my.alert({
-        title: '温馨提示',
-        content: '您暂未授权或授权已过期',
-        buttonText: '去授权',
-        success: (result) => {
-          page.goAuthorize()
-        }
-      })
-    }
-    
+    this.getUserinfo()
+  },
+  // 获取用户信息
+  getUserinfo() {
+    api.get(URL, {}, {}, app.globalData.token).then(res => {
+      if (res.code === 0) {
+        this.setData({
+          showLoading: false,
+          user:{
+            name: res.data.nickName ? res.data.nickName : '未知用户',
+            img: res.data.avatarUrl ? res.data.avatarUrl : '/images/user_2.png',
+            city: res.data.city ?  res.data.city : '未知'
+          }
+        })
+      }
+    }).catch( err => {
+      console.log(err)
+      my.hideLoading()
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
+        })
+      }
+    })
   },
   clearStorage() {
     my.confirm({

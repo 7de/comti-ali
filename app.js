@@ -17,10 +17,10 @@ App({
     } 
   },
   onShow() {
-    let _token = my.getStorageSync({ key: 'token' })
+    let _token = my.getStorageSync({ key: 'token_n' })
     this.globalData.token = this.globalData.token ? this.globalData.token : _token.data
-    if(this.globalData.token) {
-      /* api.get(URL + '?rdSession=' + this.globalData.token).then(res => {
+    /* if(this.globalData.token) {
+      api.get(URL + '?rdSession=' + this.globalData.token).then(res => {
         console.log(res)
         if (res.code === 0) {
           console.log(res)
@@ -28,12 +28,12 @@ App({
             this.getLocation()
           }
         }
-      }) */
+      })
     } else {
       my.navigateTo({
         url: '/page/authorize/authorize'
       })
-    }
+    } */
   },
   onHide() {
   }
