@@ -1,16 +1,13 @@
 Page({
-  data: {
-    array: ['投诉', '建议'],
-    index: 0,
-    pickerBtn: false,
+  data: {},
+  onLoad() {
+    my.showLoading({
+      content: '加载中...'
+    })
   },
-  onLoad() {},
-  bindPickerChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value)
-      this.setData({
-        index: e.detail.value,
-        pickerBtn: true
-      })
-      
-    }
+  onShow(){
+    setTimeout(function() {
+      my.hideLoading()
+    }, 2000)
+  }
 });

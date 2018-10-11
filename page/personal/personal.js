@@ -1,8 +1,6 @@
 import api from '/common/api.js'
 import page from '/common/page.js'
-const app = getApp()
-// const URL = 'platform/platform/customer/getCustomerByKey'
-const URL = 'platform/platform/customer/getCustomerByToken' // 用户信息
+import httpApi from '/common/interface.js'
 Page({
   data: {
     user:{
@@ -59,15 +57,20 @@ Page({
           path: '../setting/setting'
         },
         {
+          iconfont: 'trust',
+          title: '商户合作',
+          path: '../cooperation/cooperation'
+        },
+        {
           iconfont: 'information',
           arrow: 'horizontal',
           title: '关于我们',
           path: '../about/about'
         },
         {
-          iconfont: 'trust',
-          title: '商户合作申请',
-          path: '../cooperation/cooperation'
+          iconfont: 'kefu',
+          title: '帮助与反馈',
+          path: '../help/help'
         }
       ]
     },
@@ -80,7 +83,7 @@ Page({
   },
   // 获取用户信息
   getUserinfo() {
-    api.get(URL, {}, {}, app.globalData.token).then(res => {
+    api.get(httpApi.getCustomerInfo).then(res => {
       if (res.code === 0) {
         this.setData({
           showLoading: false,

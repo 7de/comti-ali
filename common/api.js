@@ -12,11 +12,11 @@ export default {
         host,
         token
       } = this.apiData
+      let subToken = my.getStorageSync({key: 'token_n'}).data
+      let _token = token.data
       return new Promise((resolve, reject) => {
-        let _token = token.data
-        let userToken = _token ? _token : Utoken
+        let userToken = _token ? _token : subToken
         if (!userToken) {
-          console.log('没有授权')
           my.alert({
             title: '提示',
             content: '您暂未授权或授权已过期',

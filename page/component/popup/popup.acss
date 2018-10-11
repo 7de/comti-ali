@@ -111,6 +111,13 @@
   padding:45rpx 30rpx;
   background-color: #fff;
 }
+.markermask .zan-btn--small{
+  height:25px;
+  line-height: 25px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: -2px;
+}
 .map-tag{
   margin: 0 20rpx;
   border-radius: 20px;

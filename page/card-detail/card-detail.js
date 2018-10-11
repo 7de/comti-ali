@@ -1,6 +1,6 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
-const cardUrl = 'platform/platform/smartCard/findCtkSmartCardList' // 卡列表
 Page({
   data: {
     cardData: {},
@@ -27,11 +27,9 @@ Page({
   // 获取卡号信息
   getCard() {
     // const _this = this
-    console.log(this.data.code)
-    api.get(cardUrl, {
+    api.get(httpApi.getCardList, {
       code: this.data.code
-    }, {}, app.globalData.token).then(res => {
-      console.log(res)
+    }).then(res => {
       my.hideLoading()
       let _data = res.data.list[0]
       this.setData({

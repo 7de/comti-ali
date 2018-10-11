@@ -1,7 +1,7 @@
 import api from '/common/api.js'
 import page from '/common/page.js'
+import httpApi from '/common/interface.js'
 const app = getApp()
-const orderURL = 'server/'
 Page({
   data: {
     showLoading: true,
@@ -82,7 +82,7 @@ Page({
           my.showLoading({
             content: '正在关闭中...'
           })
-          api.get(orderURL + 'chargeEnd/' + this.data.order_no, {}, {}, app.globalData.token).then(res => {
+          api.get(httpApi.postChargeEnd + this.data.order_no).then(res => {
             my.hideLoading()
             if (res.code === 0) {
               page.goHome()
@@ -110,7 +110,7 @@ Page({
   // 查询充电数据
   creatData() {
     my.httpRequest({
-      url: api.apiData.host + orderURL + 'queryOrderBrief/' + this.data.order_no,
+      url: api.apiData.host + httpApi.getChargeInfo + this.data.order_no,
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + app.globalData.token

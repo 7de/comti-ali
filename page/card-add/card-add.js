@@ -1,10 +1,6 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
-const userUrl = 'platform/platform/customer/getCustomerByToken' // 用户信息
-const cardUrl = 'platform/platform/smartCard/findSmartCardByCode' // 卡信息
-const balanceUrl = 'wallet/customWallet/queryBalanceBySession' // 用户余额
-const bindUrl = 'platform/platform/smartCard/updateCtkSmartCard' // 绑定卡
-const payUrl = 'ali/Alipay/jsapi/pay'
 Page({
   data: {
     code: '',
@@ -28,7 +24,6 @@ Page({
       })
     } else if (app.globalData.qrCode) {
       let _qr = decodeURIComponent(app.globalData.qrCode)
-      console.log(_qr)
       // let _url = decodeURIComponent(option.q) // 字符分割
       let _urlBox = _qr.split('scan?card=')
       this.setData({
@@ -46,7 +41,6 @@ Page({
   },
   // input失去焦距
   bindblur(e) {
-    console.log(e.detail.value)
     let _value = parseFloat(e.detail.value)
     this.setData({
       money_input: _value
@@ -54,8 +48,7 @@ Page({
   },
   // 账户余额查询
   getBalance() {
-    api.get(balanceUrl, {}, {}, app.globalData.token).then(res => {
-      console.log(res.code)
+    api.get(httpApi.getWallet).then(res => {
       this.setData({
         account: parseFloat(api.fotmatMoney(res.data))
       })
@@ -76,12 +69,10 @@ Page({
     my.showLoading({
       content: '校验中...'
     })
-    console.log('卡信息获取')
     const _this = this
-    api.get(cardUrl, {
+    api.get(httpApi.getCardInfo, {
       code: this.data.code
-    }, {
-    }, app.globalData.token).then(res => {
+    }).then(res => {
       my.hideLoading()
       let _data = res.data
       if (_data) {
@@ -142,14 +133,12 @@ Page({
         success: (result) => {
           const _this = this
           let _params = Object.assign({
-            rdSession: app.globalData.token,
             id: this.data.userId,
             subject: `${_goodName}充值${_money}元`,
             totalFee: _money * 100
           })
           if (result.confirm) {
-            api.post(payUrl, _params, {}, app.globalData.token).then(({data}) => {
-              console.log(data)
+            api.post(httpApi.postAliPay, _params).then(({data}) => {
               const _data = data
               my.tradePay({
                 orderStr: _data, //完整的支付参数拼接成的字符串，从服务端获取
@@ -183,7 +172,6 @@ Page({
               })
             }).catch( err => {
               console.log(err)
-              my.hideLoading()
               if (err.code === -1) {
                 my.showToast({
                   content: err.msg,
@@ -214,9 +202,9 @@ Page({
             source: 2, // 1,微信客户 2,支付宝客户
             token: app.globalData.token
           }
-          api.post(bindUrl, JSON.stringify(_params), {
+          api.post(httpApi.postCardBind, JSON.stringify(_params), {
             'content-type': 'application/json'
-          }, app.globalData.token).then(res => {
+          }).then(res => {
             console.log(res)
             this.getCard()
           }).catch( err => {
@@ -254,7 +242,7 @@ Page({
   },
   // 获取用户昵称
   getUser() {
-    api.get(userUrl, {}, {}, app.globalData.token).then(res => {
+    api.get(httpApi.getCustomerInfo).then(res => {
       this.setData({
         userNickname: res.data.nickName
       })

@@ -1,6 +1,6 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
-const recordURL = 'order/refundOrder/'
 Page({
   data: {
     loadingShow: true,
@@ -40,14 +40,12 @@ Page({
   // 获取数据
   getData() {
     let _params = Object.assign({
-      rdSession: app.globalData.token,
       start: this.data.pageNum,
       size: this.data.pageSize,
       sortStr: 'update_time',
       sortType: 'desc'
     })
-    api.get(recordURL + 'queryBalanceSub', _params, {}, app.globalData.token).then(({data}) => {
-      console.log(data)
+    api.get(httpApi.getWalletRecord, _params).then(({data}) => {
       if (this.data.pageNum === 1) {
         this.setData({
           recordList: data.list,
@@ -62,10 +60,10 @@ Page({
         loadingShow: false
       })
     }).catch( err => {
+      console.log(err)
       this.setData({
         loadingShow: false
       })
-      console.log(err)
       if (err.code === -1) {
         my.showToast({
           content: err.msg,

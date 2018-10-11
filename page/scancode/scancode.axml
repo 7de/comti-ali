@@ -13,7 +13,7 @@
               </view>
               <text class="zan-pull-left" style="line-height: 28px;">设备ID:</text>
               <view class="scan-subtitle-con zan-pull-left" style="width:70%">
-                <input type="number" maxlength="12" class="zan-field__input" style="height:28px;font-size:18px;" onBlur="keyBlur" value="{{code}}" focus="{{input_focus}}" name="input"  placeholder="请输入充电插座ID"/>
+                <input type="number" maxlength="12" class="zan-field__input" style="font-size:18px;" onBlur="keyBlur" value="{{code}}" focus="{{input_focus}}" name="input"  placeholder="请输入充电插座ID"/>
               </view>
             </view>
           </view>

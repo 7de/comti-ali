@@ -1,7 +1,6 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
-const cardUrl = 'platform/platform/smartCard/findCtkSmartCardList' // 卡列表
-const delUrl = 'platform/platform/smartCard/updateUntieCard'
 Page({
   data: {
     allData: [],
@@ -77,8 +76,7 @@ Page({
         content: '是否删除此卡？',
         success: (result) => {
           if (result.confirm) {
-            api.post(delUrl + '?code=' + _code, {}, {}, app.globalData.token).then(res => {
-              console.log(res)
+            api.post(httpApi.postCardUnbind + '?code=' + _code).then(res => {
               this.setData({
                 currentIndex: null
               })
@@ -128,11 +126,11 @@ Page({
   // 获取卡列表
   getCard(pageNum) {
     const _this = this
-    api.get(cardUrl, {
+    api.get(httpApi.getCardList, {
       start: pageNum,
       size: this.data.pageSize,
       sortStr: 'created_time'
-    }, {}, app.globalData.token).then(res => {
+    }).then(res => {
       my.hideLoading()
       const _data = res.data
       if (pageNum === 1) {

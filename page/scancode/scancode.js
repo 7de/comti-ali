@@ -1,10 +1,7 @@
 import api from '/common/api.js';
 import page from '/common/page.js'
+import httpApi from '/common/interface.js'
 const app = getApp()
-const balaneURL = 'wallet/customWallet/' // 钱包
-const chargrURL = 'server/' // 开始充电
-const equiUrl = 'equip/equipSocket/querySocketStatus' // 查询设备
-const formUrl = 'messagepush/service-push'
 
 Page({
   data: {
@@ -133,9 +130,9 @@ Page({
     mode: 0, // 下单模式 0 时长 1 电量
     time_value: 12, // 时长
     charger_mode: 3, // 充电模式
-    changeFee: '0.00', // 充电费
+    changeFee: '0.00',  // 充电费
     serviceFee: '0.00', // 服务费
-    totalFee: '0.00', // 总费用
+    totalFee: '0.00',   // 总费用
     showTopup: true,  // 是否显示充值按钮
     equiDisabled: false, // 设备是否可以用
     showLoading: true
@@ -168,22 +165,27 @@ Page({
   },
   handleZanTabChange(e) {
     let { itemId: selectedId } = e.target.dataset
-    this.setData({
-      'tab.selectedId':  selectedId,
-    })
-    if (selectedId === 1) {
+    let oldSel = this.data.tab.selectedId
+    // console.log(oldSel, selectedId)
+    if (oldSel !== selectedId) {
       this.setData({
-        mode: 1,
-        charger_mode: 2,
-        items: this.data.itemsEle
+        'tab.selectedId':  selectedId,
       })
-      this.checkIni(9 * 100)
-    } else {
-      this.setData({
-        mode: 0,
-        items: this.data.itemsTime
-      })
-      this.checkIni(12)
+      if (selectedId === 1) {
+        this.setData({
+          mode: 1,
+          charger_mode: 2,
+          items: this.data.itemsEle
+        })
+        this.checkIni(9 * 100)
+      } else {
+        this.setData({
+          mode: 0,
+          charger_mode: 3,
+          items: this.data.itemsTime
+        })
+        this.checkIni(12)
+      }
     }
   },
   radioChange(e) {
@@ -198,13 +200,11 @@ Page({
       })
     } else if (_value === '120' && this.data.mode === 1) {
       this.setData({
-        time_value: 9 * 100,
-        charger_mode: 2
+        time_value: 9 * 100
       })
     } else if (this.data.mode === 1) {
       this.setData({
-        time_value: _value * 100,
-        charger_mode: 2
+        time_value: _value * 100
       })
     } else {
       this.setData({
@@ -224,7 +224,6 @@ Page({
   // 编号输入
   keyBlur(e) {
     let _code = e.detail.value
-    console.log(_code)
     if (this.data.code !== _code) {
       this.setData({
         code: _code,
@@ -235,23 +234,29 @@ Page({
     }
   },
   formSubmit(e) {
-    console.log(e)
     const _this = this
     let _formId = e.detail.formId
     if (this.data.equiDisabled) {
       this.checkEqui()
-    } else if (this.data.checkedValue < 0){
+    } else if (!this.data.time_value){
+      let _msg = ''
+        if (this.data.mode === 1) {
+          _msg = '电量'
+        } else {
+          _msg = '时长'
+        }
       my.showToast({
-        content: '请选择充电时长',
+        content: `请选择充电${_msg}`,
         type: 'none'
       })
+    } else if (this.data.totalFee > parseFloat(this.data.account)) {
+      this.promptMoney()
     } else {
       my.confirm({
         title: '温馨提示',
         content: '请确认是否开始充电？',
         success: (result) => {
           if(result.confirm) {
-            console.log(this.data.charger_mode)
             let _params = {
               formId: _formId,
               chargerMode: this.data.charger_mode,
@@ -265,7 +270,7 @@ Page({
             this.setData({
               submitDisabled: true
             })
-            api.post(chargrURL + 'chargeStart', JSON.stringify(_params), {
+            api.post(httpApi.postChargeStart, JSON.stringify(_params), {
               'content-type': 'application/json'
             }, app.globalData.token).then( res => {
               my.hideLoading()
@@ -296,41 +301,42 @@ Page({
   },
   // 设备查询
   checkEqui() {
+    const _this = this
     my.showLoading({
       content: '设备查询中...'
     })
+    console.log(this.data.code)
     if (this.data.code) {
       my.httpRequest({
-        url: api.apiData.host + equiUrl + '?serialNo=' + this.data.code + '&tagsFlag=true',
+        url: api.apiData.host + httpApi.getEquipStatus + '?serialNo=' + _this.data.code + '&tagsFlag=true',
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + app.globalData.token
         },
         success: res => {
-          const _this = this
-          console.log(res)
+          const that = _this
           my.hideLoading()
           if (res.data.code === 0) {
-            _this.setData({
+            that.setData({
               equiDisabled: false,
               showLoading: false,
               showTopup: false,
             })
             // 默认选中充满自停
-            if (_this.data.mode === 1) {
-              _this.checkIni(9 * 100)
+            if (that.data.mode === 1) {
+              that.checkIni(9 * 100)
             } else {
-              _this.checkIni(12)
+              that.checkIni(12)
             }
           } else {
-            _this.setData({
+            that.setData({
               equiDisabled: true,
               items: _this.data.items,
               checkedValue: -1
             })
-            _this.equiDisabledFun()
+            that.equiDisabledFun()
             if (res.data.code === -50) {
-              _this.timeoutEqui(res.data.msg)
+              that.timeoutEqui(res.data.msg)
             } else if (res.data.code === -100) {
               wepy.navigateTo({
                 url: '/page/authorize/authorize'
@@ -352,8 +358,9 @@ Page({
         },
         fail: res => {
           console.log(res)
+          my.hideLoading()
           if (res.data.code === -50) {
-            this.timeoutEqui(res.data.msg)
+            _this.timeoutEqui(res.data.msg)
           } else {
             my.confirm({
               title: '错误提示',
@@ -381,6 +388,7 @@ Page({
     if (this.data.mode === 1) {
       _mode = 2
     }
+    // console.log(this.data.code, this.data.time_value)
     let _params = Object.assign({
       serialNum: this.data.code,
       chargeTime: this.data.time_value,
@@ -390,8 +398,7 @@ Page({
     my.showLoading({
       content: '费用查询中...'
     })
-    api.get(chargrURL + 'getServerPayInfo', _params, {}, app.globalData.token).then(({data}) => {
-      console.log(data)
+    api.get(httpApi.getMoney, _params).then(({data}) => {
       my.hideLoading()
       let _changeFee = data.changeFee ? data.changeFee : 0
       let _serviceFee = data.serviceCharge ? data.serviceCharge : 0
@@ -400,15 +407,8 @@ Page({
         serviceFee: api.fotmatMoney(_serviceFee),
         totalFee: api.fotmatMoney(Number(_changeFee) + Number(_serviceFee))
       })
-      if (_this.data.totalFee > _this.data.account) {
-        my.showToast({
-          type: 'none',
-          content: '您的余额不足以选择此服务，请及时充值。'
-        })
-        _this.setData({
-          items: _this.data.items,
-          checkedValue: -1
-        })
+      if (_this.data.totalFee > parseFloat(_this.data.account)) {
+        this.promptMoney()
       }
     }).catch( err => {
       console.log(err)
@@ -438,19 +438,18 @@ Page({
   },
   // 账户余额查询
   getBalance() {
-    api.get(balaneURL + 'queryBalanceBySession', {}, {}, app.globalData.token).then(res => {
+    api.get(httpApi.getWallet).then(res => {
       if (res.code === 0) {
         this.setData({
           showLoading: false,
           showTopup: false,
           submitDisabled: false,
-          account: parseFloat(api.fotmatMoney(res.data))
+          account: api.fotmatMoney(res.data)
         })
         this.checkEqui()
       }
     }).catch( err => {
       console.log(err)
-      my.hideLoading()
       if (err.code === -1) {
         my.showToast({
           content: err.msg,
@@ -473,24 +472,34 @@ Page({
   // 电量初始化
   checkIni(value) {
     if (!this.data.equiDisabled) {
-      this.checkMoney()
       this.setData({
         checkedValue: '120',
         time_value: value
       })
+      this.checkMoney()
     } else {
       this.equiDisabledFun()
-      /* my.showToast({
-        content: '设备不可用',
-        type: 'none',
-        duration: 2000
-      }) */
     }
+  },
+  // 余额不足提示
+  promptMoney() {
+    const _this = this
+    my.confirm({
+      title: '温馨提示',
+      content: '您的余额不足以选择此服务，请及时充值',
+      confirmButtonText: '去充值',
+      success: (result) => {
+        if (result.confirm) {
+          _this.goTopup()
+        }
+      }
+    })
   },
   // 跳转在线充值
   goTopup() {
+    let money = parseFloat(this.data.account)
     my.navigateTo({
-      url: '/page/wallet-topup/wallet-topup?account=' + this.data.account
+      url: '/page/wallet-topup/wallet-topup?account=' + money
     })
   }
 });

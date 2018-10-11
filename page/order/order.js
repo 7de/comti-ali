@@ -1,4 +1,5 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
 const orderURL = 'server/' // 订单列表
 Page({
@@ -53,7 +54,7 @@ Page({
   },
   handleZanTabChange(e) {
     let { itemId: selectedId } = e.target.dataset
-    console.info('[zan:tab:change]'+ selectedId)
+    // console.info('[zan:tab:change]'+ selectedId)
     this.setData({
       'tab.selectedId':  selectedId,
       currentTab: Number(selectedId),
@@ -85,12 +86,11 @@ Page({
     let _params = Object.assign({
       orderStatus: state,
       pageNum: pagenum,
-      pageSize: that.data.pageSize,
-      rdSession: app.globalData.token
+      pageSize: that.data.pageSize
     })
     // api.get(orderURL + 'queryOrderNoListMobile?orderStatus=' + state + '&rdSession=' + app.globalData.token + '&pageNum=' + pagenum + '&pageSize=' + that.data.pageSize).then(res => {
-    api.get(orderURL + 'queryOrderNoListMobile', _params, {}, app.globalData.token).then(res => {
-      console.log(res)
+    api.get(httpApi.getOrder, _params).then(res => {
+      // console.log(res)
       if (pagenum === 1) {
         that.setData({
           allData: res,
@@ -101,7 +101,6 @@ Page({
           'allData.data': that.data.allData.data.concat(res.data),
         })
       }
-      console.log(this.data.allData)
       that.setData({
         allDataLen: that.data.allData.data,
         loadingShow: false

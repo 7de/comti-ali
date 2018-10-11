@@ -1,7 +1,6 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
-const URL = 'wallet/customWallet/queryBalanceBySession'
-const payUrl = 'ali/Alipay/jsapi/'
 Page({
   data: {
     showLoading: false,
@@ -55,20 +54,6 @@ Page({
     })
   },
   onShow() {
-    /* my.showLoading({
-      content: '余额查询中...'
-    })
-    // 账户余额查询
-    api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
-      my.hideLoading()
-      console.log(res)
-      if(res.code === 0) {
-        this.setData({
-          showLoading: false,
-          account: parseFloat(api.fotmatMoney(res.data))
-        })
-      }
-    }) */
   },
   blurInput(e) {
     let _floatMoney = parseFloat(e.detail.value)
@@ -123,7 +108,7 @@ Page({
             my.showLoading({
               content: '充值中...'
             })
-            api.post(payUrl + 'pay', _params, {}, app.globalData.token).then( ({data}) => {
+            api.post(httpApi.postAliPay, _params).then( ({data}) => {
               my.hideLoading()
               const _data = data
               my.tradePay({
@@ -178,12 +163,22 @@ Page({
   },
   // 更新账户余额
   getMoney() {
-    api.get(URL + '?rdSession=' + app.globalData.token).then(res => {
+    api.get(httpApi.getWallet).then(res => {
       my.hideLoading()
       console.log(res)
       if(res.code === 0) {
         this.setData({
           account: parseFloat(api.fotmatMoney(res.data))
+        })
+      }
+    }).catch(err => {
+      console.log(err)
+      my.hideLoading()
+      if (err.code === -1) {
+        my.showToast({
+          content: err.msg,
+          type: 'none',
+          duration: 2000
         })
       }
     })

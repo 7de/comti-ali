@@ -1,6 +1,6 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
-const recordURL = 'order/rechargeOrder/'
 Page({
   data: {
     loadingShow: true,
@@ -43,8 +43,10 @@ Page({
       start: this.data.pageNum,
       size: this.data.pageSize
     })
-    console.log('充值记录' + app.globalData.token)
-    api.get(recordURL + 'queryRechargeRecords', _params, {}, app.globalData.token).then(({data}) => {
+    api.get(httpApi.getTopupRecord, _params).then(({data}) => {
+      this.setData({
+        loadingShow: false
+      })
       if (this.data.pageNum === 1) {
         this.setData({
           recordList: data.list,
@@ -55,14 +57,11 @@ Page({
           recordList: this.data.recordList.concat(data.list)
         })
       }
-      this.setData({
-        loadingShow: false
-      })
     }).catch( err => {
+      console.log(err)
       this.setData({
         loadingShow: false
       })
-      console.log(err)
       if (err.code === -1) {
         my.showToast({
           content: err.msg,

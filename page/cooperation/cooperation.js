@@ -8,6 +8,6 @@ Page({
   onShow(){
     setTimeout(function() {
       my.hideLoading()
-    }, 5000)
+    }, 2000)
   }
 });

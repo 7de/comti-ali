@@ -1,7 +1,6 @@
 import api from '/common/api.js';
+import httpApi from '/common/interface.js'
 const app = getApp()
-const markerUrl = 'sites/sites/' // 站点
-const orderURL = 'server/'
 Page({
   // ...fullmap,
   data: {
@@ -53,7 +52,7 @@ Page({
   // 地图标记
   getMarkers() {
     let that = this
-    api.get(markerUrl+'queryMapSiteList', {}, {}, this.data.token).then(res => {
+    api.get(httpApi.getMarker).then(res => {
       my.hideLoading()
       that.setData({
         markers: res.data
@@ -170,10 +169,6 @@ Page({
       case 3: this.openPersonal()
     }
   },
-  // 分享事件
-  shareEvent() {
-
-  },
   // 是否授权获取位置
   getLocation() {
     var that = this;
@@ -211,8 +206,8 @@ Page({
       success: (res) => {
         let _qr = decodeURIComponent(res.qrCode)
         let _qrBox = _qr.split('scan?num=')
-        console.log(_qrBox)
         let _code = _qrBox[1]
+        console.log(_code)
         if (_code) {
           my.navigateTo({
             url: '/page/scancode/scancode?num=' + _code
@@ -220,21 +215,12 @@ Page({
         } else {
           my.alert({
             title: '错误提示',
-            content: '设备编号有误，请重新扫码',
+            content: '扫码失败，请重新扫码',
             buttonText: '好的',
             success: () => {
             }
           })
         }
-      },
-      fail: () => {
-        my.alert({
-          title: '错误提示',
-          content: '扫码失败，请重新扫码',
-          buttonText: '好的',
-          success: () => {
-          }
-        })
       }
     })
   },
@@ -260,7 +246,7 @@ Page({
     my.showLoading({
       content: '订单查询中...'
     })
-    api.get(orderURL + 'queryOrderNoListMobile', _params, {}, this.data.token).then(({data}) => {
+    api.get(httpApi.getOrder, _params).then(({data}) => {
       my.hideLoading()
       let _len = data.length
       if (_len) {
